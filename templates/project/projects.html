@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} Login {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock %}
+
+{% block body %} 
+<section id="project-section">
+    <div class="head">
+        <h1><span>My</span> Projects</h1>
+        <a href="" class="btn">Create Project</a>
+    </div>
+
+    <div class="projects">
+        <div class="project">
+            <div></div>
+            <a href="" class="btn">Edit</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

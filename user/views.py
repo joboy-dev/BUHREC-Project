@@ -110,4 +110,15 @@ class LoginView(View):
         messages.error(request, 'An error occured')
         return render(request, 'user/login.html', context)
         
-        
+
+
+def logout_view(request):
+    '''View to logout a user'''
+
+    logout_url = reverse('user:login')
+
+    current_user = request.user
+    logout(request)
+
+    messages.success(request, f'See you soon, {current_user.first_name}')
+    return redirect(logout_url)

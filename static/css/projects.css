@@ -1,0 +1,43 @@
+#project-section {
+    height: 100vh;
+    width: 100%;
+}
+
+.head {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--padding);
+}
+
+.head h1 {
+    font-size: 1rem;
+    color: var(--blue-color);
+}
+
+.projects {
+    height: 90%;
+    width: 100%;
+    padding: var(--padding);
+}
+
+.projects .project {
+    height: fit-content;
+    width: 100%;
+    background-color: var(--light-gold-color);
+    padding: 10px 60px;
+    box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project a.btn {
+    font-size: 0.4rem;
+    padding: 10px 20px;
+    box-shadow: none;
+    background-color: var(--gold-color);
+}

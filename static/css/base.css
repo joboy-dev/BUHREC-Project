@@ -37,7 +37,7 @@ nav {
 }
 
 nav.expand {
-    height: 200px;
+    height: fit-content;
     align-items: start;
 }
 
@@ -52,7 +52,6 @@ nav .logo a span {
     color: var(--blue-color);
     text-decoration: underline;
 }
-
 
 nav .nav-links {
     display: flex;
@@ -90,7 +89,7 @@ nav .nav-links a {
 
 .nav-links .account .account-options {
     width: 200px;
-    height: 100px;
+    height: 70px;
 }
 
 .none {

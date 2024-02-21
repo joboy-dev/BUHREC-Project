@@ -28,7 +28,7 @@ form {
     flex-direction: column;
     align-items: start;
     justify-content: stretch;
-    gap: 40px;
+    gap: 20px;
 }
 
 form h1 {
