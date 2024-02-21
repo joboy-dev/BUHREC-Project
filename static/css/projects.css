@@ -14,8 +14,13 @@
 
 .head h1 {
     font-size: 1rem;
-    color: var(--blue-color);
+    color: var(--gold-color);
 }
+
+.head h1 span {
+    text-decoration: underline;
+    color: var(--blue-color);
+} 
 
 .projects {
     height: 90%;
@@ -33,6 +38,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+/* .project .content {
+
+} */
+
+.content a {
+    text-decoration: none;
+    color: var(--blue-color);
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.content a:hover {
+    text-decoration: underline;
 }
 
 .project a.btn {

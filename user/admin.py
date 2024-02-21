@@ -6,7 +6,7 @@ from .forms import UserChangeForm, UserCreationForm
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from .models import StudentOrResearcher, Reviewer
+from .models import StudentOrResearcher
 
 User = get_user_model()
 
@@ -35,5 +35,3 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(StudentOrResearcher)
-admin.site.register(Reviewer)
-

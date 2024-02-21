@@ -9,7 +9,7 @@
 }
 
 #form .image {
-    width: 55%;
+    width: 100%;
     height: 70%;
     padding: 0 120px;
     border-radius: 40px;
@@ -23,11 +23,12 @@
 }
 
 form {
-    width: 40%;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: stretch;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -104,4 +105,36 @@ form input[type='submit'] {
 
 form input[type='submit']:hover {
     box-shadow: none;
+}
+
+/* CK EDITOR */
+#ckform {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: var(--padding);
+}
+
+#ckform label {
+    display: block;
+    font-size: 0.7rem;
+}
+
+.ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable, .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners {
+    width: 1000px;
+    height: 700px;
+    font-size: 0.6rem;
+}
+
+.ck-word-count__characters {
+    display: none;
+}
+
+.ck-word-count__words {
+    font-size: 0.7rem;
 }
