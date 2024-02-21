@@ -37,7 +37,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(choices=roles, default=STUDENT, null=False, max_length=10)
     
     payment_approved = models.BooleanField(default=False)
-    track_no = models.UUIDField(default=uuid4)
+    track_no = models.IntegerField(null=True)
     
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -55,23 +55,29 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
-
 class StudentOrResearcher(models.Model):
-    '''Student model'''
+    '''Student/Researcher model'''
     
     # Degrees
     UG = 'undergraduate'
-    PHD = 'phd'
-    PGD = 'pgd'
-    MSC = 'msc'
+    PG = 'postgraduate'
     IND = 'independent'
     
     degrees = [
         (UG, 'Undergraduate'),
+        (PG, 'Postgraduate'),
+        (IND, 'Independent'),
+    ]
+    
+    # PG Degrees
+    PHD = 'phd'
+    PGD = 'pgd'
+    MSC = 'msc'
+    
+    pg_degrees = [
         (PHD, 'PhD'),
         (MSC, 'MSc'),
         (PGD, 'PGD'),
-        (IND, 'Independent'),
     ]
     
     # Programmes
@@ -94,6 +100,7 @@ class StudentOrResearcher(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     degree = models.CharField(choices=degrees, default=UG, null=False, max_length=13)
+    pg_degree = models.CharField(choices=pg_degrees, null=True, max_length=3)
     programme = models.CharField(choices=programmes, default=SCI, null=False, max_length=30)
     
     def __str__(self):
@@ -107,5 +114,13 @@ class Reviewer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     country_domicile = models.CharField(max_length=72, null=False)
     institution_name = models.CharField(max_length=72, null=False)
-    years_of_reviewing = models.IntegerField(null=False)
+    years_of_reviewing = models.IntegerField(null=False, default=0)
+    
+    # Use project for the assignments
+    assignments = models.ManyToManyField(StudentOrResearcher, related_name='students', blank=True)
+    pending_assignments = models.IntegerField(null=False, default=0)
+    completed_assignments = models.IntegerField(null=False, default=0)
+    due_assignments = models.IntegerField(null=False, default=0)
+    overdue_assignments = models.IntegerField(null=False, default=0)
+    withdrawn_assignments = models.IntegerField(null=False, default=0)
     

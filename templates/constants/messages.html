@@ -1,0 +1,20 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="messages {{message.tags}}">
+            <p style="width: 100%;">{{ message }}</p>
+            <i class="fa-solid fa-x cancel-button"></i>
+        </div>
+
+        <script>
+            var flash_message = document.querySelector(".messages");
+            var cancelButton = document.querySelector('.cancel-button');
+
+            function close() {
+                flash_message.style.display = "none";
+            }
+
+            setTimeout(close, 10000);
+            cancelButton.addEventListener('click', close);
+        </script>
+    {% endfor %}
+{% endif %}

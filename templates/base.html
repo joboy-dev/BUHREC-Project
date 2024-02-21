@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUHREC- {% block page_title %} {% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block styles %} {% endblock %}
+
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{% url 'project:home' %}"><span>BU</span>HREC</a>
+        </div>
+
+        <div class="nav-links">
+            <div class="main">
+                <a href="{% url 'project:home' %}" class="{% if active_link == 'home' %}active{% endif %}">Home</a>
+                <a href="" class="{% if active_link == 'about' %}active{% endif %}">About</a>
+                <a href="" class="{% if active_link == 'project' %}active{% endif %}">Project</a>
+
+                {% if not user.is_authenticated %}
+                <a href="{% url 'user:login' %}" class="{% if active_link == 'login' %}active{% endif %}">Login</a>
+                <a href="{% url 'user:signup' %}" class="{% if active_link == 'signup' %}active{% endif %}">Sign Up</a>
+                {% endif %}
+            </div>
+            
+            {% if user.is_authenticated %}
+            <div class="account">
+                <p class="account-button">Account</p>
+
+                <div class="account-options none">
+                    <a href="">Profile</a><br>
+                    <a href="">Logout</a>
+                </div>
+            </div>
+            {% endif %}
+    </nav>
+
+    {% include 'constants/messages.html' %}
+    
+    {% block body %} {% endblock %}
+
+    <footer>
+        <p>&copy; {{ year }}</p>
+    </footer>
+
+    <script src="{% static 'js/base.js' %}"></script>
+    
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} Login {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block body %} 
+<section id="form">
+    <div class="image">
+        <img src="{% static 'images/login.jpg' %}" alt="login-img">
+    </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <h1><span>Log</span> In</h1>
+        {{form}}
+        <input type="submit" class="btn" value="Login">
+    </form>
+</section>
+{% endblock %}

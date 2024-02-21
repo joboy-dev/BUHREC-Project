@@ -1,0 +1,47 @@
+#hero {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 40px 0;
+}
+
+#hero .hero-content {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+#hero .image-container {
+    height: 70%;
+    width: 50%;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.image-container img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.hero-content h1 {
+    font-size: 1.2rem;
+    color: var(--blue-color);
+}
+
+.hero-content p {
+    font-size: 0.7rem;
+    color: var(--gold-color);
+    margin-bottom: 20px;
+}
+
+/* ------------------------------------------------------ */
+
+/* CONTACT */
+#contact {
+    height: 50vh;
+    width: 100%;
+    background-color: var(--light-gold-color);
+}
