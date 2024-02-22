@@ -8,18 +8,39 @@
 
 {% block body %} 
 <section id="project-section">
-    <div class="head">
-        <h1><span>My</span> Projects</h1>
-        <a href="{% url 'project:create-project' %}" class="btn">Create Project</a>
-    </div>
-
-    <div class="projects">
-        <div class="project">
-            <div class="content">
-                <a href="">Project name</a>
-            </div>
-            <a href="" class="btn">Edit</a>
+    
+    {% if user.role == 'student' or user.role == 'researcher' %}
+        <div class="head">
+            <h1><span>My</span> Projects</h1>
+            <a href="{% url 'project:create-project' %}" class="btn">Create Project</a>
         </div>
-    </div>
+
+        {% if projects %}
+        <div class="projects">
+            {% for project in projects %}
+            <div class="project">
+                <div class="content">
+                    <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
+                    <p>Created: <span>{{ project.created_at }}</span></p>
+                    <p>
+                        Approved: 
+                        {% if project.approved %}
+                        <span style="color: rgba(47, 168, 108);">Yes</span>
+                        {% else %}
+                        <span style="color: rgba(238, 107, 107);">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <a href="" class="btn">Edit</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="nothing">You do not have any projects currently.</p>
+        {% endif %}
+
+    {% else %}
+    <p class="nothing">You have to be a student or researcher to have access to this page.</p>
+    {% endif %}
 </section>
 {% endblock %}

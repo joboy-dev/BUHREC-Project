@@ -146,6 +146,14 @@ a.btn:hover {
     box-shadow: none;
 }
 
+p.nothing{
+    text-align: center;
+    color: var(--gold-color);
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin : 50px 0;
+}
+
 footer {
     background-color: var(--blue-color);
     height: 50px;

@@ -38,6 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 /* .project .content {
@@ -51,12 +52,23 @@
     font-weight: bold;
 }
 
+.content p {
+    font-weight: 600;
+    font-size: 0.6rem;
+    color: var(--gold-color);
+}
+
+.content p span{
+    font-weight: 400;
+    color: var(--blue-color);
+}
+
 .content a:hover {
     text-decoration: underline;
 }
 
 .project a.btn {
-    font-size: 0.4rem;
+    font-size: 0.6rem;
     padding: 10px 20px;
     box-shadow: none;
     background-color: var(--gold-color);

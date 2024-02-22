@@ -13,18 +13,27 @@ class Project(models.Model):
     
     id = models.UUIDField(default=uuid4, primary_key=True)
     title = models.CharField(unique=True, max_length=1000, null=False)
-    introduction = CKEditor5Field(default='', null=False, max_length=5000)
-    background = CKEditor5Field(default='', null=False, max_length=5000)
-    scope_and_limitation = CKEditor5Field(default='', null=False, max_length=3000)
-    justification = CKEditor5Field(default='', null=False, max_length=3000)
-    objectives = CKEditor5Field(default='', null=False, max_length=3500)
-    hypothesis = CKEditor5Field(default='', null=True, max_length=2000)
-    literature_review = CKEditor5Field(default='', null=False, max_length=10000)
-    materials_and_methods = CKEditor5Field(default='', null=False, max_length=13000)
-    procedure = CKEditor5Field(default='', null=False, max_length=5000)
+    introduction = CKEditor5Field(default='', null=False, blank=True, max_length=5000)
+    background = CKEditor5Field(default='', null=False, blank=True, max_length=5000)
+    scope_and_limitation = CKEditor5Field(default='', null=False, blank=True, max_length=3000)
+    justification = CKEditor5Field(default='', null=False, blank=True, max_length=3000)
+    objectives = CKEditor5Field(default='', null=False, blank=True, max_length=3500)
+    hypothesis = CKEditor5Field(default='', null=True, blank=True, max_length=2000)
+    literature_review = CKEditor5Field(default='', null=False, blank=True, max_length=10000)
+    materials_and_methods = CKEditor5Field(default='', null=False, blank=True, max_length=13000)
+    procedure = CKEditor5Field(default='', null=False, blank=True, max_length=5000)
     
     approved = models.BooleanField(default=False)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    # def __str__(self):
+    #     return f'{self.title} by {self.owner.last_name}, {self.owner.first_name}'
     
     
 class Reviewer(models.Model):
@@ -43,4 +52,5 @@ class Reviewer(models.Model):
     due_assignments = models.IntegerField(null=False, default=0)
     overdue_assignments = models.IntegerField(null=False, default=0)
     withdrawn_assignments = models.IntegerField(null=False, default=0)
-
+    
+    

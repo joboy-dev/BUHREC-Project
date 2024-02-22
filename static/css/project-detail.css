@@ -1,0 +1,82 @@
+#detail-section {
+    height: 100vh;
+    width: 100%;
+}
+
+.breadcrumb {
+    height: 200px;
+    width: 100%;
+    background-color: var(--light-gold-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.breadcrumb h1 {
+    color: var(--blue-color);
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.project {
+    height: 70%;
+    width: 100%;
+    padding: var(--padding);
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.project .content {
+    height: 100%;
+    width: 65%;
+    overflow-y: scroll;
+}
+
+.project .metadata-container {
+    width: 30%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-around;
+}
+
+.metadata-container .metadata {
+    width: 100%;
+    height: 90%;
+    background-color: var(--light-gold-color);
+    box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.content .data {
+    margin-bottom: 20px;
+}
+
+.data h1 {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--gold-color);
+    text-transform: uppercase;
+}
+
+.data p {
+    font-size: 0.7rem;
+    text-align: justify;
+    color: var(--blue-color);
+}
+
+.actions a.btn {
+    font-size: 0.6rem;
+    padding: 10px 20px;
+    box-shadow: none;
+    background-color: var(--gold-color);
+}
+
+.actions a.btn.approve {
+    background-color: rgba(47, 168, 108);
+}

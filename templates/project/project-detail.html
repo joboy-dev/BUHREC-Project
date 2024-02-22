@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} Projects {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/project-detail.css' %}">
+{% endblock %}
+
+{% block body %} 
+<section id="detail-section">
+    {% if project %}
+    <div class="breadcrumb">
+        <h1>{{ project.title }}</h1>
+    </div>
+
+    <div class="project">
+        <div class="content">
+            <div class="data">
+                <h1>Introduction</h1>
+                <p>{{ project.introduction | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Background</h1>
+                <p>{{ project.background | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Scope and Limitation</h1>
+                <p>{{ project.scope_and_limitation | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Justification</h1>
+                <p>{{ project.justification | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Ojectives</h1>
+                <p>{{ project.objectives | safe }}</p>
+            </div>
+
+            {% if project.hypothesis %}
+            <div class="data">
+                <h1>Hypothesis</h1>
+                <p>{{ project.hypothesis | safe }}</p>
+            </div>
+            {% endif %}
+
+            <div class="data">
+                <h1>Literature Review</h1>
+                <p>{{ project.literature_review | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Materials and Methods</h1>
+                <p>{{ project.materials_and_methods | safe }}</p>
+            </div>
+            <div class="data">
+                <h1>Procedure</h1>
+                <p>{{ project.procedure | safe }}</p>
+            </div>
+        </div>
+
+        <div class="metadata-container">
+            <div class="metadata">
+
+            </div>
+
+            <div class="actions">
+                {% if user.role == 'student' or user.role == 'researcher' %}
+                <a href="" class="btn">Edit</a>
+                {% elif user.role == 'reviewer' %}
+                <a href="" class="btn approve">Approve</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="nothing">Project does not exist</p>
+    {% endif %}
+</section>
+{% endblock %}
