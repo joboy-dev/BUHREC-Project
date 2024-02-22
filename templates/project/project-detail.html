@@ -59,6 +59,18 @@
 
         <div class="metadata-container">
             <div class="metadata">
+                <p>Project name: <span>{{ project.title }}</span></p>
+                <p>Author: <span>{{ project.owner.last_name }}, {{ project.owner.first_name }}</span></p>
+                <p>Created at: <span>{{ project.created_at }}</span></p>
+                <p>Last updated: <span>{{ project.updated_at }}</span></p>
+                <p>
+                    Approved: 
+                    {% if project.approved %}
+                    <span style="color: rgba(47, 168, 108);">Yes</span>
+                    {% else %}
+                    <span style="color: rgba(238, 107, 107);">No</span>
+                    {% endif %}
+                </p>
 
             </div>
 

@@ -1,4 +1,5 @@
 from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -22,6 +23,14 @@ class HomeView(View):
     def get(self, request):
         context['active_link'] = 'home'
         return render(request, 'index.html', context)
+
+
+class AboutView(View):
+    '''About View'''
+    
+    def get(self, request):
+        context['active_link'] = 'about'
+        return render(request, 'about.html', context)
     
 
 class ProjectsView(LoginRequiredMixin, generic.ListView):
@@ -53,7 +62,24 @@ class GetProjectDetail(LoginRequiredMixin, generic.DetailView):
     def get(self, request, id):
         project = self.model.objects.get(id=id)
         context['project'] = project
-        return render(request, self.template_name, context)    
+        return render(request, self.template_name, context)
+    
+
+class EditProject(LoginRequiredMixin, generic.UpdateView):
+    '''View to edit a project'''  
+    
+    login_url = 'user:login'
+    
+    model = Project
+    template_name = 'project/edit-project.html'
+    form_class = forms.EditProjectForm
+    success_url = reverse_lazy('project:projects')
+    success_message = 'Project updated successfully'
+    
+    def get(self, request):
+        form = self.form_class(initial={})
+        
+    
     
 
 class CreateProjectView(LoginRequiredMixin, generic.CreateView):

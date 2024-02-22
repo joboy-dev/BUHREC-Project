@@ -1,0 +1,10 @@
+#about-section {
+    height: 100vh;
+    width: 100%;
+}
+
+.content {
+    height: 70%;
+    width: 100%;
+    padding: var(--padding);
+}

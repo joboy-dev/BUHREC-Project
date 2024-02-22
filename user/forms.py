@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 import re
 
+from .models import StudentOrResearcher
+
 User = get_user_model()
 
 def is_valid_password(password):
@@ -78,4 +80,24 @@ class LoginForm(forms.Form):
     
     email = forms.EmailField(max_length=200, required=True, widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'input-field'}))
     password = forms.CharField(max_length=200, min_length=8, required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input-field'}))
+
+
+class StudentResearcherForm(forms.ModelForm):
+    '''Form to set up student and researcher profile'''
+    
+    class Meta:
+        model = StudentOrResearcher
+        fields = '__all__'
+        exclude = ['id', 'user']
+        
+    def clean(self):
+        cleaned_data = super().clean()  # Call parent's clean method first
+
+        degree = cleaned_data.get('degree')
+        pg_degree = cleaned_data.get('pg_degree')
+        
+        if degree == 'pg' and pg_degree is None:
+            raise forms.ValidationError('Select a postgraduate degree')
+        
+        return cleaned_data
     

@@ -24,7 +24,7 @@
         <div class="nav-links">
             <div class="main">
                 <a href="{% url 'project:home' %}" class="{% if active_link == 'home' %}active{% endif %}">Home</a>
-                <a href="" class="{% if active_link == 'about' %}active{% endif %}">About</a>
+                <a href="{% url 'project:about' %}" class="{% if active_link == 'about' %}active{% endif %}">About</a>
                 <a href="{% url 'project:projects' %}" class="{% if active_link == 'projects' %}active{% endif %}">Projects</a>
 
                 {% if not user.is_authenticated %}

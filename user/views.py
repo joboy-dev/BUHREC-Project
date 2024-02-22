@@ -10,18 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
 from . import forms
-
-def is_valid_password(password):
-    '''Function to check if password is valid'''
-    
-    # Regular expression for a valid password
-    # Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.
-    password_regex = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
-    
-    if re.match(password_regex, password):
-        return True
-    else:
-        return False
+from .models import StudentOrResearcher
 
 User = get_user_model()
 
@@ -35,7 +24,7 @@ class SignUpView(generic.CreateView):
     model = User
     template_name = 'user/signup.html'
     form_class = forms.SignUpForm
-    success_url = reverse_lazy('project:home')
+    success_url = reverse_lazy('user:student-researcher-signup')
     
     def get(self, request):
         form = self.form_class()
@@ -51,7 +40,6 @@ class SignUpView(generic.CreateView):
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            # password2 = form.cleaned_data['confirm_password']
             role = form.cleaned_data['role']
             
             # Sign up and login logic
@@ -70,6 +58,50 @@ class SignUpView(generic.CreateView):
             login(request, user)
                     
             messages.success(request, f'Account created successfully. Welcome, {first_name}')
+            
+            if role == 'reviewer':
+                self.success_url = ''
+            return redirect(self.success_url)
+        
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, self.template_name, context)
+    
+
+class StudentResearcherSignUpView(generic.CreateView):
+    '''View to set up studnt and researcher profile'''
+    
+    model = StudentOrResearcher
+    template_name = 'user/student-researcher-signup.html'
+    form_class = forms.StudentResearcherForm
+    success_url = reverse_lazy('project:home')
+    
+    def get(self, request):
+        form = self.form_class()
+        context['active_link'] = 'account'
+        context['form'] = form
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            degree = form.cleaned_data['degree']
+            pg_degree = form.cleaned_data['pg_degree']
+            programme = form.cleaned_data['programme']
+            
+            # Sign up and login logic
+            student = StudentOrResearcher.objects.create(
+                degree=degree,
+                pg_degree=pg_degree,
+                programme=programme,
+                user=request.user,
+            )
+                    
+            messages.success(request, f'Profile saved')
             return redirect(self.success_url)
         
         context['form'] = form
@@ -110,7 +142,6 @@ class LoginView(View):
         messages.error(request, 'An error occured')
         return render(request, 'user/login.html', context)
         
-
 
 def logout_view(request):
     '''View to logout a user'''

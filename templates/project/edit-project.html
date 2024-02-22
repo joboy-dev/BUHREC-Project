@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} Edit Project {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block body %} 
+<section id="ckform">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1><span>Create</span> Project</h1>
+
+        {{form.media}}
+        {{ form }}
+        <input type="submit" class="btn" value="Edit">
+    </form>
+</section>
+{% endblock %}
