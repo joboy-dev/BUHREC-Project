@@ -43,43 +43,10 @@ class ProjectsView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'projects'
     
     def get(self, request):
-        context['active_link'] = 'projects'
-        
         projects = Project.objects.filter(owner=self.request.user)
+        context['active_link'] = 'projects'
         context['projects'] = projects
         return render(request, self.template_name, context)
-    
-
-class GetProjectDetail(LoginRequiredMixin, generic.DetailView):
-    '''View to get details about a particular project'''
-    
-    login_url = 'user:login'
-    
-    model = Project
-    template_name = 'project/project-detail.html'
-    context_object_name = 'project'
-    
-    def get(self, request, id):
-        project = self.model.objects.get(id=id)
-        context['project'] = project
-        return render(request, self.template_name, context)
-    
-
-class EditProject(LoginRequiredMixin, generic.UpdateView):
-    '''View to edit a project'''  
-    
-    login_url = 'user:login'
-    
-    model = Project
-    template_name = 'project/edit-project.html'
-    form_class = forms.EditProjectForm
-    success_url = reverse_lazy('project:projects')
-    success_message = 'Project updated successfully'
-    
-    def get(self, request):
-        form = self.form_class(initial={})
-        
-    
     
 
 class CreateProjectView(LoginRequiredMixin, generic.CreateView):
@@ -136,5 +103,41 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
                 messages.error(request, f'{error}')
         
         return render(request, self.template_name, context)
-            
-            
+    
+
+class GetProjectDetail(LoginRequiredMixin, generic.DetailView):
+    '''View to get details about a particular project'''
+    
+    login_url = 'user:login'
+    
+    model = Project
+    template_name = 'project/project-detail.html'
+    context_object_name = 'project'
+    
+    def get(self, request, id):
+        project = self.model.objects.get(id=id)
+        context['project'] = project
+        context['active_link'] = 'projects'
+        return render(request, self.template_name, context)
+    
+
+class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
+    '''View to edit a project'''  
+    
+    login_url = 'user:login'
+    
+    model = Project
+    template_name = 'project/edit-project.html'
+    form_class = forms.EditProjectForm
+    success_url = reverse_lazy('project:projects')
+    success_message = 'Project updated successfully'
+    context_object_name = 'project'
+    
+    def get(self, request, id):
+        project = Project.objects.get(id=id)
+        form = self.form_class(instance=project)
+        context['form'] = form
+        context['active_link'] = 'projects'
+        return render(request, self.template_name, context)
+    
+        

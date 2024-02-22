@@ -57,4 +57,3 @@ class EditProjectForm(forms.ModelForm):
         
         return cleaned_data
     
-    

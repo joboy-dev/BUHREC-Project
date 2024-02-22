@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 import re
 
+from project.models import Reviewer
+from user.countries import get_all_countries
+
 from .models import StudentOrResearcher
 
 User = get_user_model()
@@ -85,6 +88,10 @@ class LoginForm(forms.Form):
 class StudentResearcherForm(forms.ModelForm):
     '''Form to set up student and researcher profile'''
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["pg_degree"].required = False
+    
     class Meta:
         model = StudentOrResearcher
         fields = '__all__'
@@ -100,4 +107,16 @@ class StudentResearcherForm(forms.ModelForm):
             raise forms.ValidationError('Select a postgraduate degree')
         
         return cleaned_data
+    
+    
+class ReviewerForm(forms.ModelForm):
+    '''Form to set up reviewer profile'''
+    
+    country_domicile = forms.CharField(max_length=200, required=True, widget=forms.Select(choices=get_all_countries()))
+    institution_name = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder': 'Institution name', 'class': 'input-field'}))
+    years_of_reviewing = forms.CharField(max_length=200, required=True, widget=forms.NumberInput(attrs={'placeholder': 'Years of reviewing', 'class': 'input-field'}))
+    
+    class Meta:
+        model = Reviewer
+        fields = ['country_domicile', 'institution_name', 'years_of_reviewing']
     

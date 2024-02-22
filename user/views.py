@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
+from project.models import Reviewer
+
 from . import forms
 from .models import StudentOrResearcher
 
@@ -60,7 +62,7 @@ class SignUpView(generic.CreateView):
             messages.success(request, f'Account created successfully. Welcome, {first_name}')
             
             if role == 'reviewer':
-                self.success_url = ''
+                self.success_url = reverse_lazy('user:reviewer-signup')
             return redirect(self.success_url)
         
         context['form'] = form
@@ -98,6 +100,47 @@ class StudentResearcherSignUpView(generic.CreateView):
                 degree=degree,
                 pg_degree=pg_degree,
                 programme=programme,
+                user=request.user,
+            )
+                    
+            messages.success(request, f'Profile saved')
+            return redirect(self.success_url)
+        
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, self.template_name, context)
+    
+
+class ReviewerSignUpView(generic.CreateView):
+    '''View to set up studnt and researcher profile'''
+    
+    model = Reviewer
+    template_name = 'user/reviewer-signup.html'
+    form_class = forms.ReviewerForm
+    success_url = reverse_lazy('project:home')
+    
+    def get(self, request):
+        form = self.form_class()
+        context['active_link'] = 'account'
+        context['form'] = form
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            country_domicile = form.cleaned_data['country_domicile']
+            institution_name = form.cleaned_data['institution_name']
+            years_of_reviewing = form.cleaned_data['years_of_reviewing']
+            
+            # Sign up and login logic
+            student = Reviewer.objects.create(
+                country_domicile=country_domicile,
+                institution_name=institution_name,
+                years_of_reviewing=years_of_reviewing,
                 user=request.user,
             )
                     

@@ -73,10 +73,13 @@
 .actions a.btn {
     font-size: 0.6rem;
     padding: 10px 20px;
-    box-shadow: none;
     background-color: var(--gold-color);
 }
 
 .actions a.btn.approve {
     background-color: rgba(47, 168, 108);
+}
+
+.actions a.btn.delete {
+    background-color: rgba(238, 107, 107);
 }

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from uuid import uuid4
 from django_ckeditor_5.fields import CKEditor5Field
 
+from user.countries import get_all_countries
 from user.models import CustomUser
 
 User = get_user_model()
@@ -38,10 +39,10 @@ class Project(models.Model):
     
 class Reviewer(models.Model):
     '''Reviewer model'''
-    
+
     id = models.UUIDField(default=uuid4, primary_key=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    country_domicile = models.CharField(max_length=72, null=False)
+    country_domicile = models.CharField(max_length=72, null=False, choices=get_all_countries(), default='NG')
     institution_name = models.CharField(max_length=72, null=False)
     years_of_reviewing = models.IntegerField(null=False, default=0)
     
@@ -52,5 +53,4 @@ class Reviewer(models.Model):
     due_assignments = models.IntegerField(null=False, default=0)
     overdue_assignments = models.IntegerField(null=False, default=0)
     withdrawn_assignments = models.IntegerField(null=False, default=0)
-    
     
