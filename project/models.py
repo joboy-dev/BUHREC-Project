@@ -25,6 +25,9 @@ class Project(models.Model):
     procedure = CKEditor5Field(default='', null=False, blank=True, max_length=5000)
     
     approved = models.BooleanField(default=False)
+    payment_approved = models.BooleanField(default=False)
+    track_id = models.UUIDField(null=True, unique=True)
+    
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,7 +39,7 @@ class Project(models.Model):
     def __str__(self):
         return f'{self.title} by {self.owner.last_name}, {self.owner.first_name}'
     
-    
+
 class Reviewer(models.Model):
     '''Reviewer model'''
 
@@ -47,12 +50,23 @@ class Reviewer(models.Model):
     years_of_reviewing = models.IntegerField(null=False, default=0)
     
     # Use project for the assignments
-    assignments = models.ManyToManyField(Project, related_name='projects', blank=True)
-    completed_assignments = models.ManyToManyField(Project, related_name='completed', blank=True) 
+    # assignments = models.ManyToManyField(Project, related_name='projects', blank=True)
+    # completed_assignments = models.ManyToManyField(Project, related_name='completed', blank=True) 
     
     pending_assignments_no = models.IntegerField(null=False, default=0)
     completed_assignments_no = models.IntegerField(null=False, default=0)
     due_assignments_no = models.IntegerField(null=False, default=0)
     overdue_assignments_no = models.IntegerField(null=False, default=0)
     withdrawn_assignments_no = models.IntegerField(null=False, default=0)
+    
+
+class Assignment(models.Model):
+    '''Assignment model'''
+    
+    id = models.UUIDField(default=uuid4, primary_key=True)
+    is_complete = models.BooleanField(default=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    reviewer = models.ForeignKey(Reviewer, on_delete=models.CASCADE, null=True)
+    
+    
     

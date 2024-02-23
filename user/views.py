@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from project.models import Reviewer
 
 from . import forms
-from .models import StudentOrResearcher
+from .models import Admin, CustomUser, StudentOrResearcher
 
 User = get_user_model()
 
@@ -63,6 +63,8 @@ class SignUpView(generic.CreateView):
             
             if role == 'reviewer':
                 self.success_url = reverse_lazy('user:reviewer-signup')
+            if role == 'admin':
+                self.success_url = reverse_lazy('user:admin-signup')
             return redirect(self.success_url)
         
         context['form'] = form
@@ -96,12 +98,16 @@ class StudentResearcherSignUpView(generic.CreateView):
             programme = form.cleaned_data['programme']
             
             # Sign up and login logic
-            student = StudentOrResearcher.objects.create(
+            StudentOrResearcher.objects.create(
                 degree=degree,
                 pg_degree=pg_degree,
                 programme=programme,
                 user=request.user,
             )
+            
+            user = User.objects.get(id=request.user.id)
+            user.is_verified = True
+            user.save()
                     
             messages.success(request, f'Profile saved')
             return redirect(self.success_url)
@@ -137,12 +143,16 @@ class ReviewerSignUpView(generic.CreateView):
             years_of_reviewing = form.cleaned_data['years_of_reviewing']
             
             # Sign up and login logic
-            student = Reviewer.objects.create(
+            Reviewer.objects.create(
                 country_domicile=country_domicile,
                 institution_name=institution_name,
                 years_of_reviewing=years_of_reviewing,
                 user=request.user,
             )
+            
+            user = User.objects.get(id=request.user.id)
+            user.is_verified = True
+            user.save()
                     
             messages.success(request, f'Profile saved')
             return redirect(self.success_url)
@@ -154,6 +164,48 @@ class ReviewerSignUpView(generic.CreateView):
                 
         return render(request, self.template_name, context)
         
+        
+
+class AdminSignUpView(generic.CreateView):
+    '''View to set up studnt and researcher profile'''
+    
+    model = Admin
+    template_name = 'user/admin-signup.html'
+    form_class = forms.AdminForm
+    success_url = reverse_lazy('project:home')
+    
+    def get(self, request):
+        form = self.form_class()
+        context['active_link'] = 'account'
+        context['form'] = form
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            role = form.cleaned_data['role']
+            
+            # Sign up and login logic
+            Admin.objects.create(
+                role=role,
+                user=request.user,
+            )
+            
+            user = User.objects.get(id=request.user.id)
+            user.is_verified = True
+            user.save()
+                    
+            messages.success(request, f'Profile saved')
+            return redirect(self.success_url)
+        
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, self.template_name, context)
+    
 
 class LoginView(View):
     '''View to log in users'''

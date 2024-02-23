@@ -7,7 +7,7 @@ import re
 from project.models import Reviewer
 from user.countries import get_all_countries
 
-from .models import StudentOrResearcher
+from .models import StudentOrResearcher, Admin
 
 User = get_user_model()
 
@@ -120,3 +120,12 @@ class ReviewerForm(forms.ModelForm):
         model = Reviewer
         fields = ['country_domicile', 'institution_name', 'years_of_reviewing']
     
+    
+
+class AdminForm(forms.ModelForm):
+    '''Form to set up admin profile'''
+    
+    class Meta:
+        model = Admin
+        fields = '__all__'
+        exclude = ['id', 'user']

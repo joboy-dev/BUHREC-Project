@@ -29,6 +29,7 @@ class CustomUserManager(BaseUserManager):
         extras.setdefault('is_active', True)
         extras.setdefault('is_staff', True)
         extras.setdefault('is_superuser', True)
+        extras.setdefault('is_verifed', True)
 
         # check if is_staff and is_superuser is True
         if extras.get('is_staff') is not True:

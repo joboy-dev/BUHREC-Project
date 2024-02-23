@@ -32,7 +32,7 @@
                         {% endif %}
                     </p>
                 </div>
-                
+
                 <form action="{% url 'project:toggle-approval' project.id %}" method="post">
                     {% csrf_token %}
                     {% if not project.approved %}
@@ -45,7 +45,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <p class="nothing">You do not have any pending assignments currently.</p>
+        <p class="nothing">You do not have any pending assignments.</p>
         {% endif %}
 
         {% if completed_assignments %}
@@ -79,7 +79,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <p class="nothing">You do not have any completed assignments</p>
+        <p class="nothing">You do not have any completed assignments.</p>
         {% endif %}
     </div>
 </section>

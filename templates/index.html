@@ -13,7 +13,7 @@
         <p>We help you manage your projects effectively and efficiently.</p>
 
         {% if not user.is_authenticated %}
-        <a href="{% url 'project:home' %}" class="btn">Get Started</a>
+        <a href="{% url 'user:login' %}" class="btn">Get Started</a>
         {% else %}
             {% if user.role == 'student' or user.role == 'researcher' %}
             <a href="{% url 'project:create-project' %}" class="btn">Create a project</a>

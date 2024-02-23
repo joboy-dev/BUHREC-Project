@@ -97,6 +97,10 @@ h1 span {
     padding-right: 120px;
 }
 
+.assignments p.nothing:first-of-type {
+    padding-left: 120px;
+}
+
 .assignments .projects .project {
     padding: 10px 20px;
 }

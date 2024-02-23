@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from datetime import datetime
 
-from project.models import Project, Reviewer
+from project.models import Project, Reviewer, Assignment
 from user.permissions import IsReviewer, IsStudentOrResearcher
 from . import forms
 
@@ -102,7 +102,7 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
             materials_and_methods = form.cleaned_data['materials_and_methods']
             procedure = form.cleaned_data['procedure']
             
-            Project.objects.create(
+            project = Project.objects.create(
                 title=title,              
                 introduction=introduction,              
                 background=background,                
@@ -115,6 +115,9 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
                 procedure=procedure,        
                 owner=request.user        
             )
+            
+            # Create assignment
+            Assignment.objects.create(project=project)
 
             messages.success(request, f'{self.success_message}')
             return redirect(self.success_url)
@@ -178,7 +181,8 @@ class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateVie
 #########################################################
 #########################################################
 
-# REVIEWER
+# REVIEWER VIEWS
+
 class AssignmentsView(LoginRequiredMixin, View):
     '''View to get all current assignements'''
     
@@ -201,8 +205,9 @@ class AssignmentsView(LoginRequiredMixin, View):
     def get(self, request):
         reviewer = Reviewer.objects.get(user=request.user)
         # get all assignments
-        assignments = reviewer.assignments.all()
-        completed_assignments = reviewer.completed_assignments.all()
+        assignments = Assignment.objects.filter(reviewer=reviewer)
+        completed_assignments = Assignment.objects.filter(reviewer=reviewer, is_complete=True)
+        
         context['active_link'] = 'assignments'
         context['assignments'] = assignments
         context['completed_assignments'] = completed_assignments
@@ -227,28 +232,39 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
         return super().dispatch(request, id)
     
     def post(self, request, id):
-        projects= Project.objects.filter(id=id)
-        project = projects.first()
+        project= Project.objects.get(id=id)
         reviewer = Reviewer.objects.get(user=request.user)
+        assignment = Assignment.objects.get(project=project)
         
         if not project.approved:
             reviewer.completed_assignments_no += 1
             reviewer.pending_assignments_no -= 1
-            reviewer.assignments.remove(projects)
-            reviewer.completed_assignments.add(projects)
         else:
             reviewer.completed_assignments_no -= 1
             reviewer.pending_assignments_no += 1
-            reviewer.assignments.add(projects)
-            reviewer.completed_assignments.remove(projects)
         
+        # Update project approved status and assignment completion status
         project.approved = not project.approved
+        assignment.is_complete = not assignment.is_complete
+        
+        # Save instances
         project.save()
         reviewer.save()
+        assignment.save()
         
         messages.success(request, 'Approval status changed')
         return redirect(reverse_lazy('project:assignments'))
+    
+    
+
+################################################
+################################################
+
+# ADMIN VIEWS
         
-        
+class AdminDashboardView(LoginRequiredMixin, View):
+    '''View for admin to see their dashboard'''
+    
+           
     
         

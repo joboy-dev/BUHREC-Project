@@ -17,7 +17,7 @@ class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['id', 'approved', 'owner']
+        exclude = ['id', 'approved', 'owner', 'payment_approved', 'track_id']
         
     def clean(self):
         cleaned_data = super().clean()  # Call parent's clean method first
@@ -44,8 +44,8 @@ class EditProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-        exclude = ['id', 'approved', 'owner']
-        
+        exclude = ['id', 'approved', 'owner', 'payment_approved', 'track_id']
+                
     def clean(self):
         cleaned_data = super().clean()  # Call parent's clean method first
 

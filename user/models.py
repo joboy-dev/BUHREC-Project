@@ -35,10 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=128, null=False)
     profile_pic = models.ImageField(default='user/default.png', upload_to=upload_image, null=True)
     role = models.CharField(choices=roles, default=STUDENT, null=False, max_length=10)
-    
-    payment_approved = models.BooleanField(default=False)
-    track_no = models.IntegerField(null=True)
-    
+    is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -117,7 +114,7 @@ class Admin(models.Model):
     
     roles = [
         (CHAIR, 'Chair'),
-        (ASST_CHAIR, 'Asst chair'),
+        (ASST_CHAIR, 'Assistant chair'),
         (STAFF, 'Staff'),
     ]
     
