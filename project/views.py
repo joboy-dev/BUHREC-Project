@@ -202,8 +202,11 @@ class AssignmentsView(LoginRequiredMixin, View):
         reviewer = Reviewer.objects.get(user=request.user)
         # get all assignments
         assignments = reviewer.assignments.all()
+        completed_assignments = reviewer.completed_assignments.all()
         context['active_link'] = 'assignments'
         context['assignments'] = assignments
+        context['completed_assignments'] = completed_assignments
+        
         return render(request, self.template_name, context)
     
     
@@ -224,9 +227,25 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
         return super().dispatch(request, id)
     
     def post(self, request, id):
-        project = Project.objects.get(id=id)
+        projects= Project.objects.filter(id=id)
+        project = projects.first()
+        reviewer = Reviewer.objects.get(user=request.user)
+        
+        if not project.approved:
+            reviewer.completed_assignments_no += 1
+            reviewer.pending_assignments_no -= 1
+            reviewer.assignments.remove(projects)
+            reviewer.completed_assignments.add(projects)
+        else:
+            reviewer.completed_assignments_no -= 1
+            reviewer.pending_assignments_no += 1
+            reviewer.assignments.add(projects)
+            reviewer.completed_assignments.remove(projects)
+        
         project.approved = not project.approved
         project.save()
+        reviewer.save()
+        
         messages.success(request, 'Approval status changed')
         return redirect(reverse_lazy('project:assignments'))
         

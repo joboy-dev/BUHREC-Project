@@ -48,9 +48,11 @@ class Reviewer(models.Model):
     
     # Use project for the assignments
     assignments = models.ManyToManyField(Project, related_name='projects', blank=True)
-    pending_assignments = models.IntegerField(null=False, default=0)
-    completed_assignments = models.IntegerField(null=False, default=0)
-    due_assignments = models.IntegerField(null=False, default=0)
-    overdue_assignments = models.IntegerField(null=False, default=0)
-    withdrawn_assignments = models.IntegerField(null=False, default=0)
+    completed_assignments = models.ManyToManyField(Project, related_name='completed', blank=True) 
+    
+    pending_assignments_no = models.IntegerField(null=False, default=0)
+    completed_assignments_no = models.IntegerField(null=False, default=0)
+    due_assignments_no = models.IntegerField(null=False, default=0)
+    overdue_assignments_no = models.IntegerField(null=False, default=0)
+    withdrawn_assignments_no = models.IntegerField(null=False, default=0)
     
