@@ -11,7 +11,6 @@
     <h1><span>Edit</span> Project</h1>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
         {{form.media}}
         {{ form }}
         <input type="submit" class="btn" value="Edit">

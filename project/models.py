@@ -33,8 +33,8 @@ class Project(models.Model):
     class Meta:
         ordering = ['-created_at']
     
-    # def __str__(self):
-    #     return f'{self.title} by {self.owner.last_name}, {self.owner.first_name}'
+    def __str__(self):
+        return f'{self.title} by {self.owner.last_name}, {self.owner.first_name}'
     
     
 class Reviewer(models.Model):

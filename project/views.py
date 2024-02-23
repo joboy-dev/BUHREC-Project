@@ -1,15 +1,14 @@
-from django.db.models.query import QuerySet
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views import View, generic
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from datetime import datetime
 
-from project.models import Project
+from project.models import Project, Reviewer
+from user.permissions import IsReviewer, IsStudentOrResearcher
 from . import forms
 
 context = {
@@ -42,6 +41,17 @@ class ProjectsView(LoginRequiredMixin, generic.ListView):
     template_name = 'project/projects.html'
     context_object_name = 'projects'
     
+    permission_required = 'user.is_student_or_researcher'
+    permission_denied_message = 'Access denied as you are not a student or researcher'
+    
+    def dispatch(self, request):
+        user = request.user
+        # check permission
+        if not IsStudentOrResearcher.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request)
+    
     def get(self, request):
         projects = Project.objects.filter(owner=self.request.user)
         context['active_link'] = 'projects'
@@ -59,6 +69,18 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
     form_class = forms.CreateProjectForm
     success_message = 'Project created successfully'
     success_url = reverse_lazy('project:projects')
+    
+    permission_required = 'user.is_student_or_researcher'
+    permission_denied_message = 'Access denied as you are not a student or researcher'
+    
+    def dispatch(self, request):
+        user = request.user
+        
+        # check permission
+        if not IsStudentOrResearcher.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request)
     
     def get(self, request):
         context['active_link'] = 'projects'
@@ -133,11 +155,81 @@ class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateVie
     success_message = 'Project updated successfully'
     context_object_name = 'project'
     
+    permission_required = 'project.is_project_owner'
+    permission_denied_message = 'Access denied as you are not the owner of this project'
+    
+    def dispatch(self, request, id):
+        user = request.user
+        
+        # check permission
+        if not IsStudentOrResearcher.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request)
+    
     def get(self, request, id):
         project = Project.objects.get(id=id)
         form = self.form_class(instance=project)
         context['form'] = form
         context['active_link'] = 'projects'
         return render(request, self.template_name, context)
+    
+    
+#########################################################
+#########################################################
+
+# REVIEWER
+class AssignmentsView(LoginRequiredMixin, View):
+    '''View to get all current assignements'''
+    
+    login_url = 'user:login'
+    
+    template_name = 'project/assignments.html'
+    context_object_name = 'projects'
+    
+    permission_required = 'user.is_reviewer'
+    permission_denied_message = 'Access denied as you are not a reviewer'
+    
+    def dispatch(self, request):
+        user = request.user
+        # check permission
+        if not IsReviewer.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request)
+    
+    def get(self, request):
+        reviewer = Reviewer.objects.get(user=request.user)
+        # get all assignments
+        assignments = reviewer.assignments.all()
+        context['active_link'] = 'assignments'
+        context['assignments'] = assignments
+        return render(request, self.template_name, context)
+    
+    
+class ToggleApprovalProjectView(LoginRequiredMixin, View):
+    '''View to approve a project'''
+    
+    login_url = 'user:login'
+    
+    permission_required = 'user.is_reviewer'
+    permission_denied_message = 'Access denied as you are not a reviewer'
+    
+    def dispatch(self, request, id):
+        user = request.user
+        # check permission
+        if not IsReviewer.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request, id)
+    
+    def post(self, request, id):
+        project = Project.objects.get(id=id)
+        project.approved = not project.approved
+        project.save()
+        messages.success(request, 'Approval status changed')
+        return redirect(reverse_lazy('project:assignments'))
+        
+        
     
         

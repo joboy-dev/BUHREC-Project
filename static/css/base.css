@@ -121,7 +121,8 @@ nav a.active {
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
+    margin: 0 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -132,7 +133,7 @@ nav a.active {
     background-color: var(--blue-color);
 }
 
-a.btn {
+a.btn, button.btn {
     text-decoration: none;
     color: var(--white-color);
     background-color: var(--blue-color);
@@ -140,9 +141,10 @@ a.btn {
     font-size: 0.6rem;
     border-radius: 10px;
     box-shadow: var(--box-shadow);
+    border: none;
 }
 
-a.btn:hover {
+a.btn:hover, button.btn:hover {
     box-shadow: none;
 }
 

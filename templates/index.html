@@ -15,7 +15,12 @@
         {% if not user.is_authenticated %}
         <a href="{% url 'project:home' %}" class="btn">Get Started</a>
         {% else %}
-        <a href="{% url 'project:create-project' %}" class="btn">Create a project</a>
+            {% if user.role == 'student' or user.role == 'researcher' %}
+            <a href="{% url 'project:create-project' %}" class="btn">Create a project</a>
+            {% elif user.role == 'reviewer' %}
+            <a href="{% url 'project:assignments' %}" class="btn">View assignments</a>
+            {% endif %}
+
         {% endif %}
 
     </div>

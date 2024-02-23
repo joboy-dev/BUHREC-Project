@@ -9,17 +9,17 @@
 {% block body %} 
 <section id="project-section">
     <div class="head">
-        <h1><span>My</span> Projects</h1>
-        <a href="{% url 'project:create-project' %}" class="btn">Create Project</a>
+        <h1><span>My</span> Assignments</h1>
     </div>
-
-    {% if projects %}
+    {% if assignments %}
     <div class="projects">
-        {% for project in projects %}
+        {% for project in assignments %}
         <div class="project">
             <div class="content">
                 <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
                 <p>Created: <span>{{ project.created_at }}</span></p>
+                <p>Last updated: <span>{{ project.updated_at }}</span></p>
+                <p>Author: <span>{{ project.owner.last_name }}, {{ project.owner.first_name }}</span></p>
                 <p>
                     Approved: 
                     {% if project.approved %}
@@ -29,12 +29,19 @@
                     {% endif %}
                 </p>
             </div>
-            <a href="{% url 'project:edit-project' project.id %}" class="btn">Edit</a>
+            <form action="{% url 'project:toggle-approval' project.id %}" method="post">
+                {% csrf_token %}
+                {% if not project.approved %}
+                <button type="submit" class="btn" style="background-color: rgba(47, 168, 108);">Approve</button>
+                {% else %}
+                <button type="submit" class="btn" style="background-color: rgba(238, 107, 107);">Unapprove</button>
+                {% endif %}
+            </form>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <p class="nothing">You do not have any projects currently.</p>
+    <p class="nothing">You do not have any assignments currently.</p>
     {% endif %}
 </section>
 {% endblock %}
