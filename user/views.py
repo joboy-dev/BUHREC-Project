@@ -39,18 +39,15 @@ class SignUpView(generic.CreateView):
         
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             role = form.cleaned_data['role']
             
+            # pop unnecessary data
+            form.cleaned_data.pop('confirm_password')
+            
             # Sign up and login logic
             user = User.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=password,
-                role=role,
+                **form.cleaned_data
             )
                     
             user.set_password(password)
@@ -233,6 +230,9 @@ class LoginView(View):
         
         messages.error(request, 'An error occured')
         return render(request, 'user/login.html', context)
+    
+
+# class UserDetailView(LoginRequiredMixin, )
         
 
 def logout_view(request):

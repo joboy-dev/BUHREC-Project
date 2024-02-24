@@ -56,8 +56,16 @@
                             <p>Role: <span>{{ user.role.capitalize }}</span></p>
                         </div>
                     </div>
-                    <a href="">Account settings</a>
-                    <a href="{% url 'user:logout' %}">Logout</a>
+
+                    <div class="hr"></div>
+
+                    <div class="account-actions">
+                        <a href="">View Profile</a>
+                        <a href="">Edit profile</a>
+                        <a href="">Change password</a>
+                        <a href="{% url 'user:logout' %}" style="color: rgba(238, 107, 107);">Logout</a>
+                    </div>
+
                 </div>
             </div>
             {% endif %}

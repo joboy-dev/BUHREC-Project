@@ -43,17 +43,6 @@ class EditProjectForm(forms.ModelForm):
         model = Project
         fields = '__all__'
         exclude = ['id', 'approved', 'owner', 'payment_approved', 'track_id']
-                
-    def clean(self):
-        cleaned_data = super().clean()  # Call parent's clean method first
-
-        title = cleaned_data.get('title')
-        
-        # Password checks
-        if Project.objects.filter(title=title).exists():
-            raise forms.ValidationError('This project title already exists!')
-        
-        return cleaned_data
 
 
 # REMARK

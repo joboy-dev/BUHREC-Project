@@ -9,8 +9,9 @@ from uuid import uuid4
 from datetime import datetime
 
 from project.models import Project, Reviewer, Assignment, Remark
+from project.permissions import IsProjectOwner
 from user.models import Admin, StudentOrResearcher
-from user.permissions import IsReviewer, IsStudentOrResearcher
+from user.permissions import IsAdmin, IsAsstChairAdmin, IsReviewer, IsStudentOrResearcher
 from . import forms
 
 context = {
@@ -128,7 +129,7 @@ class GetProjectDetail(LoginRequiredMixin, View):
     permission_denied_message = 'Access denied as you are not a reviewer'
     
     def get(self, request, id):
-        project = self.model.objects.get(id=id)
+        project = get_object_or_404(Project, id=id)
         
         # get all remarks
         remarks = Remark.objects.filter(project=project)
@@ -154,12 +155,12 @@ class GetProjectDetail(LoginRequiredMixin, View):
             message = form.cleaned_data['message']
             user = request.user
             
-            # Permission check
+            # Permission check for reviewer to create a remark
             if not IsReviewer.has_permission(request, user):
                 messages.error(request, f'{self.permission_denied_message}')
             else:
                 # create remark
-                project = Project.objects.get(id=id)
+                project = get_object_or_404(Project, id=id)
                 reviewer = Reviewer.objects.get(user=user)
                 Remark.objects.create(
                     message=message,
@@ -178,7 +179,7 @@ class GetProjectDetail(LoginRequiredMixin, View):
                 
     
 
-class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
+class EditProjectView(LoginRequiredMixin, generic.UpdateView):
     '''View to edit a project'''  
     
     login_url = 'user:login'
@@ -191,23 +192,59 @@ class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateVie
     context_object_name = 'project'
     
     permission_required = 'project.is_project_owner'
-    permission_denied_message = 'Access denied as you are not the owner of this project'
+    permission_denied_message = 'You do not have access to this project'
     
     def dispatch(self, request, id):
-        user = request.user
-        
         # check permission
-        if not IsStudentOrResearcher.has_permission(request, user):
+        if not IsProjectOwner.has_permission(request, get_object_or_404(Project, id=id)):
             messages.error(request, f'{self.permission_denied_message}')
             return redirect(reverse_lazy('project:home'))
         return super().dispatch(request, id)
     
     def get(self, request, id):
-        project = Project.objects.get(id=id)
+        project = get_object_or_404(Project, id=id)
         form = self.form_class(instance=project)
         context['form'] = form
         context['active_link'] = 'projects'
         return render(request, self.template_name, context)
+    
+    def post(self, request, id):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            Project.objects.filter(id=id).update(**form.cleaned_data)
+
+            messages.success(request, f'{self.success_message}')
+            return redirect(self.success_url)
+        
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+        
+        return render(request, self.template_name, context)
+    
+    
+class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
+    '''View to delete a project'''
+    
+    login_url = 'user:login'
+    model = Project
+    success_message = 'Project deleted successfully'
+    success_url = reverse_lazy('project:projects')
+    
+    def post(self, request, id):
+        user = request.user
+        
+        # check permission
+        if not IsProjectOwner.has_permission(request, get_object_or_404(Project, id=id)):
+            messages.error(request, 'You cannot delete another user\'s project')
+            return redirect(reverse_lazy('project:home'))
+        
+        get_object_or_404(Project, id=id).delete()
+        messages.success(request, f'{self.success_message}')
+        
+        return redirect(self.success_url)
     
     
 #########################################################
@@ -264,7 +301,7 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
         return super().dispatch(request, id)
     
     def post(self, request, id):
-        project= Project.objects.get(id=id)
+        project = get_object_or_404(Project, id=id)
         reviewer = Reviewer.objects.get(user=request.user)
         assignment = Assignment.objects.get(project=project)
         
@@ -298,6 +335,18 @@ class AdminDashboardView(LoginRequiredMixin, View):
     
     login_url = 'user:login'
     
+    permission_required = 'user.is_admin'
+    permission_denied_message = 'Access denied as you are not n admin'
+    
+    
+    def dispatch(self, request):
+        user = request.user
+        # check permission
+        if not IsAdmin.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+        return super().dispatch(request)
+    
     def get(self, request):
         admin = Admin.objects.get(user=request.user)
         projects = Project.objects.all()
@@ -316,8 +365,12 @@ class AssignProjectTrackIdView(LoginRequiredMixin, View):
     login_url = 'user:login'
     
     def post(self, request, id):
-        project = Project.objects.get(id=id)
+        admin = Admin.objects.get(user=request.user)
+        if not IsAsstChairAdmin.has_permission(request, admin):
+            messages.error(request, 'Access denied as you are not a chair admin')
+            return redirect(reverse_lazy('project:home'))
         
+        project = get_object_or_404(Project, id=id)
         # Assign track id to the project using uuid4
         project.track_id = uuid4()
         project.save()

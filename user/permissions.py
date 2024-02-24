@@ -20,3 +20,36 @@ class IsReviewer(Permission):
     @staticmethod
     def has_permission(request, obj):
         return obj.role == 'reviewer'
+    
+
+class IsAdmin(Permission):
+    '''Permission to check is a user's role is an admin chair'''
+    
+    name = 'Is admin'
+    codename = 'is_admin'
+    
+    @staticmethod
+    def has_permission(request, obj):
+        return obj.role == 'admin'
+    
+
+class IsChairAdmin(Permission):
+    '''Permission to check is a user's role is an admin chair'''
+    
+    name = 'Is chair admin'
+    codename = 'is_chair_admin'
+    
+    @staticmethod
+    def has_permission(request, obj):
+        return obj.role == 'chair'
+    
+
+class IsAsstChairAdmin(Permission):
+    '''Permission to check is a user's role is an admin asst chair'''
+    
+    name = 'Is asst chair admin'
+    codename = 'is_asst_chair_admin'
+    
+    @staticmethod
+    def has_permission(request, obj):
+        return obj.role == 'asst chair'

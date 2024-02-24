@@ -9,14 +9,13 @@
 {% block body %} 
 <section id="admin-dashboard">
     <h1>Dashboard</h1>
-    <div class="head">
-        <h1 class="projects">All Projects</h1>
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="text" placeholder="Search projects" name="search">
-            <input type="submit" value="Search">
-        </form>
-    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="Search projects" name="search">
+        <input type="submit" value="Search">
+    </form>
+
+    <div class="hr"></div>
 
     {% if admin.role == 'chair' %}
         {% if projects %}
@@ -50,32 +49,60 @@
         {% endif %}
 
     {% elif admin.role == 'asst chair' %}
-        {% if unassigned_projects %}
-        <div class="projects-container">
-            {% for project in unassigned_projects %}
-                <div class="project">
-                    <div>
-                        <p><span>Title: </span>{{ project.title }}</p>
-                        <p><span>Author: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p>
-                        <p><span>Created: </span>{{ project.created_at }}</p>
-                        <!-- <p><span>Reviewer: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p> -->
-                        {% if project.track_id %}
-                        <p><span>Track id: </span>{{ project.track_id}} </p>
-                        {% endif %}
+        <div class="asst-chair">
+            <div class="container">
+                <h1>Unassigned Projects</h1>
+                {% if unassigned_projects %}
+                    <div class="projects-container">
+                        {% for project in unassigned_projects %}
+                        <div class="project">
+                            <div>
+                                <p><span>Title: </span>{{ project.title }}</p>
+                                <p><span>Author: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p>
+                                <p><span>Created: </span>{{ project.created_at }}</p>
+                                <!-- <p><span>Reviewer: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p> -->
+                                {% if project.track_id %}
+                                <p><span>Track id: </span>{{ project.track_id}} </p>
+                                {% endif %}
+                            </div>
+        
+                            <form action="{% url 'project:assign-track-id' project.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">Assign track id</button>
+                            </form>
+                        </div>
+                        {% endfor %}
                     </div>
-
-                    <form action="{% url 'project:assign-track-id' project.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn">Assign track id</button>
-                    </form>
-                </div>
-            {% endfor %}
+            
+                {% else %}
+                <p class="nothing">No pending unassigned projects</p>
+                {% endif %}
+            </div>
+            
+            <div class="container">
+                <h1>All Projects</h1>
+                {% if projects %}
+                    <div class="projects-container">
+                        {% for project in projects %}
+                        <div class="project">
+                            <div>
+                                <p><span>Title: </span>{{ project.title }}</p>
+                                <p><span>Author: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p>
+                                <p><span>Created: </span>{{ project.created_at }}</p>
+                                <!-- <p><span>Reviewer: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p> -->
+                                {% if project.track_id %}
+                                <p><span>Track id: </span>{{ project.track_id}} </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+            
+                {% else %}
+                <p class="nothing">No projects available</p>
+                {% endif %}
+            </div>
         </div>
-
-        {% else %}
-        <p class="nothing">No pending unassigned projects</p>
-        {% endif %}
-
     {% endif %}
     
 </section>

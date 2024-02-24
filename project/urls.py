@@ -9,6 +9,7 @@ urlpatterns = [
     path('projects/create/', views.CreateProjectView.as_view(), name='create-project'),
     path('project/<uuid:id>/', views.GetProjectDetail.as_view(), name='detail'),
     path('project/<uuid:id>/edit/', views.EditProjectView.as_view(), name='edit-project'),
+    path('project/<uuid:id>/delete/', views.DeleteProjectView.as_view(), name='delete-project'),
     
     # REVIEWER
     path('assignments/', views.AssignmentsView.as_view(), name='assignments'),

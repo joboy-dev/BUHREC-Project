@@ -9,26 +9,19 @@ h1 {
     padding: 10px 120px;
 }
 
-.head {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 120px;
-}
-
-.head form {
+form {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 30px;
+    padding: var(--padding);
 }
 
 form input[type='text'] {
     border: none;
     outline: none;
     height: 50px;
-    width: 350px;
+    width: 90%;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
@@ -97,6 +90,29 @@ tr td {
 
 
 /* ASSISTANT CHAIR ROLE */
+
+.asst-chair {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.asst-chair .container {
+    width: 48%;
+    height: 77dvh;
+    overflow-y: scroll;
+}
+
+.asst-chair .projects-container {
+    height: 90%;
+    width: 100%;
+}
+
+.container h1 {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
 
 .project {
     height: fit-content;

@@ -14,7 +14,7 @@ class Project(models.Model):
     '''Project model'''
     
     id = models.UUIDField(default=uuid4, primary_key=True)
-    title = models.CharField(unique=True, max_length=1000, null=False)
+    title = models.CharField(max_length=1000, null=False)
     introduction = CKEditor5Field(default='', null=False, blank=True, max_length=50000)
     background = CKEditor5Field(default='', null=False, blank=True, max_length=50000)
     scope_and_limitation = CKEditor5Field(default='', null=False, blank=True, max_length=50000)

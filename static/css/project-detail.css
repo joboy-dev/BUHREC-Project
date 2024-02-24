@@ -121,7 +121,7 @@
     padding: 0 10px;
 }
 
-.actions a.btn {
+.actions a.btn, .actions button.btn {
     font-size: 0.6rem;
     padding: 10px 20px;
     background-color: var(--gold-color);

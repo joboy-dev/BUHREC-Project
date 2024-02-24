@@ -8,5 +8,5 @@ class IsProjectOwner(Permission):
     
     @staticmethod
     def has_permission(request, obj):
-        return obj.owner == request.user
+        return obj.owner.user == request.user
         
