@@ -232,7 +232,11 @@ class LoginView(View):
         return render(request, 'user/login.html', context)
     
 
-# class UserDetailView(LoginRequiredMixin, )
+class UserDetailsView(LoginRequiredMixin, View):
+    '''View to get user details'''
+    
+    def get(self, request):
+        return render(request, 'user/profile.html', context)
         
 
 def logout_view(request):

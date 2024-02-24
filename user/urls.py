@@ -10,5 +10,7 @@ urlpatterns = [
     path('admin/save/', views.AdminSignUpView.as_view(), name='admin-signup'),
     
     path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.logout_view, name='logout')
+    path('logout/', views.logout_view, name='logout'),
+    
+    path('profile/', views.UserDetailsView.as_view(), name='profile')
 ]
