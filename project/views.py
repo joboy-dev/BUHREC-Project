@@ -5,6 +5,7 @@ from django.views import View, generic
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+from uuid import uuid4
 from datetime import datetime
 
 from project.models import Project, Reviewer, Assignment, Remark
@@ -295,12 +296,33 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
 class AdminDashboardView(LoginRequiredMixin, View):
     '''View for admin to see their dashboard'''
     
+    login_url = 'user:login'
+    
     def get(self, request):
         admin = Admin.objects.get(user=request.user)
         projects = Project.objects.all()
+        unassigned_projects = Project.objects.filter(track_id=None)
+        
         context['active_link'] = 'dashboard'
         context['admin'] = admin
         context['projects'] = projects
+        context['unassigned_projects'] = unassigned_projects
         return render(request, 'admin/admin-dashboard.html', context)
+    
+
+class AssignProjectTrackIdView(LoginRequiredMixin, View):
+    '''View for admin asst chair to assign a track id to a project'''
+    
+    login_url = 'user:login'
+    
+    def post(self, request, id):
+        project = Project.objects.get(id=id)
+        
+        project.track_id = uuid4()
+        project.save()
+        messages.success(request, 'Track id assigned successfully')
+        return redirect(reverse_lazy('project:admin-dashboard'))
+        
+    
     
         

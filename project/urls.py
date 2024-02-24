@@ -16,4 +16,5 @@ urlpatterns = [
     
     # ADMIN
     path('dashboard/', views.AdminDashboardView.as_view(), name='admin-dashboard'),
+    path('project/<uuid:id>/assign-track-id/', views.AssignProjectTrackIdView.as_view(), name='assign-track-id'),
 ]
