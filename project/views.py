@@ -318,8 +318,10 @@ class AssignProjectTrackIdView(LoginRequiredMixin, View):
     def post(self, request, id):
         project = Project.objects.get(id=id)
         
+        # Assign track id to the project using uuid4
         project.track_id = uuid4()
         project.save()
+        
         messages.success(request, 'Track id assigned successfully')
         return redirect(reverse_lazy('project:admin-dashboard'))
         

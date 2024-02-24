@@ -50,9 +50,9 @@
         {% endif %}
 
     {% elif admin.role == 'asst chair' %}
-        {% if projects %}
+        {% if unassigned_projects %}
         <div class="projects-container">
-            {% for project in projects %}
+            {% for project in unassigned_projects %}
                 <div class="project">
                     <div>
                         <p><span>Title: </span>{{ project.title }}</p>
@@ -73,7 +73,7 @@
         </div>
 
         {% else %}
-        <p class="nothing">No projects available</p>
+        <p class="nothing">No pending unassigned projects</p>
         {% endif %}
 
     {% endif %}
