@@ -6,31 +6,85 @@ section#admin-dashbaord {
 h1 {
     font-size: 1rem;
     color: var(--gold-color);
-    padding: var(--padding);
+    padding: 10px 120px;
 }
 
-h1.projects {
-    font-weight: 600;
-    font-size: 0.8rem;
+.head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 120px;
+}
+
+.head form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+form input[type='text'] {
+    border: none;
+    outline: none;
+    height: 50px;
+    width: 350px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
+    font-size: 0.6rem;
     color: var(--blue-color);
 }
 
-table {
-    width: 90%;
-    border-collapse: collapse;
-    margin: 0 auto;
-    /* animation: fadeDown 1s linear; */
+form input:focus {
+    box-shadow: none;
+    border: 1px solid var(--gold-color);
 }
 
-tr.head th {
+form input[type='submit'] {
+    height: 50px;
+    width: 100px;
+    border: none;
+    background-color: var(--blue-color);
+    color: var(--white-color);
+    border-radius: 10px;
+    font-size: 0.6rem;
+    box-shadow: var(--box-shadow);
+}
+
+form input[type='submit']:hover {
+    box-shadow: none;
+}
+
+.head h1.projects {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--blue-color);
+    padding: 0;
+}
+
+.projects-container {
+    height: 77dvh;
+    width: 100%;
+    overflow: scroll;
+    padding: var(--padding);
+}
+
+/* CHAIR ROLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+tr.table-head th {
     font-weight: 600;
     font-size: 0.7rem;
     padding: 10px;
     text-align: justify;
-}
+    animation: fadeDown 1s linear;
 
-tr {
-    /* animation: fadeSlide 1s linear; */
 }
 
 tr td {
@@ -39,5 +93,35 @@ tr td {
     padding: 10px;
     text-align: justify;
     animation: fadeSlide 1s linear;
+}
 
+
+/* ASSISTANT CHAIR ROLE */
+
+.project {
+    height: fit-content;
+    width: 100%;
+    box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: var(--light-gold-color);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project p {
+    font-size: 0.6rem;
+    color: var(--gold-color);
+}
+
+.project p span {
+    color: var(--blue-color);
+    font-weight: 600;
+}
+
+button.btn {
+    background-color: var(--green-color);
+    box-shadow: none;
 }

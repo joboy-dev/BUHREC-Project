@@ -3,6 +3,8 @@
    --gold-color: #B28D1B;
    --white-color: #F0F1F6;
    --light-gold-color: #E5D49E;
+   --green-color: rgba(47, 168, 108);
+   --red-color: rgba(238, 107, 107);
    --padding: 20px 120px;
    --box-shadow: 2px 4px 8px rgb(0, 0, 0, 0.3);
 }
@@ -74,7 +76,7 @@ nav {
 }
 
 nav.expand {
-    height: fit-content;
+    height: 200px;
     align-items: start;
 }
 
@@ -91,10 +93,11 @@ nav .logo a span {
 }
 
 nav .nav-links {
+    width: 50%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    width: 50%;
+    justify-content: end;
+    gap: 120px;
 }
 
 nav .nav-links.align-top {
@@ -119,43 +122,84 @@ nav .nav-links a {
 .nav-links .account {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.nav-links .account .account-options {
-    width: 200px;
-    height: 70px;
-}
-
-.none {
-    display: none;
-}
-
-.flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: start;
     justify-content: start;
-    gap: 0;
+    position: relative;
 }
 
-.account p {
+.nav-links .account .dropdown {
+    width: 350px;
+    height: fit-content;
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    right: 0;
+    top: 70px;
+    background-color: var(--white-color);
+}
+
+.dropdown .profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.detail h2 {
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: var(--blue-color);
+}
+
+.detail p {
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: var(--blue-color);
+}
+
+.detail p span {
     color: var(--gold-color);
-    font-size: 0.6rem;
+}
+
+.nav-links .profile-img {
+    width: 45px;
+    height: 45px;
+    border: 1px solid var(--gold-color);
+    border-radius: 50%;
+    overflow: hidden;
     cursor: pointer;
 }
 
-.account p:hover {
-    color: var(--blur-color);
+.nav-links .profile-img:hover {
+    border: 1px solid var(--blue-color);
+    scale: 1.05;
 }
 
-
+.profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 nav a.active {
     color: var(--blue-color);
     animation: scaleUpDown 1s infinite;
     font-weight: 600;
+}
+
+/* DROPDOWN */
+.hide-dropdown {
+    display: none;
+}
+
+.show-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 5px;
+    animation: fadeDown 0.5s linear;
 }
 
 /* SCROLL BAR */
@@ -181,6 +225,7 @@ a.btn, button.btn {
     border-radius: 10px;
     box-shadow: var(--box-shadow);
     border: none;
+    cursor: pointer;
 }
 
 a.btn:hover, button.btn:hover {
@@ -252,6 +297,7 @@ footer p {
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+    animation: fadeDown 0.5s linear;
 }
 
 .breadcrumb h1 {

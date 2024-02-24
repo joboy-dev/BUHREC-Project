@@ -41,10 +41,22 @@
             
             {% if user.is_authenticated %}
             <div class="account">
-                <p class="account-button">Account</p>
+                <div class="account-button profile-img">
+                    <img src="{{ user.profile_pic.url }}" alt="profile">
+                </div>
 
-                <div class="account-options none">
-                    <a href="">Profile</a>
+                <div class="dropdown hide-dropdown">
+                    <div class="profile-container">
+                        <div class="profile-img">
+                            <img src="{{ user.profile_pic.url }}" alt="profile">
+                        </div>
+
+                        <div class="detail">
+                            <h2 class="name">{{ user.last_name }}, {{ user.first_name}}</h2>
+                            <p>Role: <span>{{ user.role.capitalize }}</span></p>
+                        </div>
+                    </div>
+                    <a href="">Account settings</a>
                     <a href="{% url 'user:logout' %}">Logout</a>
                 </div>
             </div>
