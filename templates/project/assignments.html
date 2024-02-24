@@ -16,30 +16,19 @@
         {% if assignments %}
         <div class="projects">
             <h1>Pending</h1>
-            {% for project in assignments %}
+            {% for assignment in assignments %}
             <div class="project">
                 <div class="content">
-                    <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
-                    <p>Created: <span>{{ project.created_at }}</span></p>
-                    <p>Last updated: <span>{{ project.updated_at }}</span></p>
-                    <p>Author: <span>{{ project.owner.last_name }}, {{ project.owner.first_name }}</span></p>
-                    <p>
-                        Approved: 
-                        {% if project.approved %}
-                        <span style="color: rgba(47, 168, 108);">Yes</span>
-                        {% else %}
-                        <span style="color: rgba(238, 107, 107);">No</span>
-                        {% endif %}
-                    </p>
+                    <a href="{% url 'project:detail' assignment.project.id %}">{{ assignment.project.title }}</a>
+                    <p>Created: <span>{{ assignment.project.created_at }}</span></p>
+                    <p>Last updated: <span>{{ assignment.project.updated_at }}</span></p>
+                    <p>Author: <span>{{ assignment.project.owner.user.last_name }}, {{ assignment.project.owner.user.first_name }}</span></p>
+                    <p>Approved: <span style="color: rgba(238, 107, 107);">No</span></p>
                 </div>
 
-                <form action="{% url 'project:toggle-approval' project.id %}" method="post">
+                <form action="{% url 'project:toggle-approval' assignment.project.id %}" method="post">
                     {% csrf_token %}
-                    {% if not project.approved %}
                     <button type="submit" class="btn" style="background-color: rgba(47, 168, 108);">Approve</button>
-                    {% else %}
-                    <button type="submit" class="btn" style="background-color: rgba(238, 107, 107);">Unapprove</button>
-                    {% endif %}
                 </form>
             </div>
             {% endfor %}
@@ -51,29 +40,18 @@
         {% if completed_assignments %}
         <div class="projects">
             <h1>Completed</h1>
-            {% for project in completed_assignments %}
+            {% for completed in completed_assignments %}
             <div class="project">
                 <div class="content">
-                    <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
-                    <p>Created: <span>{{ project.created_at }}</span></p>
-                    <p>Last updated: <span>{{ project.updated_at }}</span></p>
-                    <p>Author: <span>{{ project.owner.last_name }}, {{ project.owner.first_name }}</span></p>
-                    <p>
-                        Approved: 
-                        {% if project.approved %}
-                        <span style="color: rgba(47, 168, 108);">Yes</span>
-                        {% else %}
-                        <span style="color: rgba(238, 107, 107);">No</span>
-                        {% endif %}
-                    </p>
+                    <a href="{% url 'project:detail' completed.project.id %}">{{ completed.project.title }}</a>
+                    <p>Created: <span>{{ completed.project.created_at }}</span></p>
+                    <p>Last updated: <span>{{ completed.project.updated_at }}</span></p>
+                    <p>Author: <span>{{ completed.project.owner.user.last_name }}, {{ completed.project.owner.user.first_name }}</span></p>
+                    <p>Approved: <span style="color: rgba(47, 168, 108);">Yes</span></p>
                 </div>
-                <form action="{% url 'project:toggle-approval' project.id %}" method="post">
+                <form action="{% url 'project:toggle-approval' completed.project.id %}" method="post">
                     {% csrf_token %}
-                    {% if not project.approved %}
-                    <button type="submit" class="btn" style="background-color: rgba(47, 168, 108);">Approve</button>
-                    {% else %}
                     <button type="submit" class="btn" style="background-color: rgba(238, 107, 107);">Unapprove</button>
-                    {% endif %}
                 </form>
             </div>
             {% endfor %}

@@ -97,7 +97,6 @@ class StudentResearcherSignUpView(generic.CreateView):
             pg_degree = form.cleaned_data['pg_degree']
             programme = form.cleaned_data['programme']
             
-            # Sign up and login logic
             StudentOrResearcher.objects.create(
                 degree=degree,
                 pg_degree=pg_degree,
@@ -142,7 +141,6 @@ class ReviewerSignUpView(generic.CreateView):
             institution_name = form.cleaned_data['institution_name']
             years_of_reviewing = form.cleaned_data['years_of_reviewing']
             
-            # Sign up and login logic
             Reviewer.objects.create(
                 country_domicile=country_domicile,
                 institution_name=institution_name,
@@ -186,7 +184,6 @@ class AdminSignUpView(generic.CreateView):
         if form.is_valid():
             role = form.cleaned_data['role']
             
-            # Sign up and login logic
             Admin.objects.create(
                 role=role,
                 user=request.user,

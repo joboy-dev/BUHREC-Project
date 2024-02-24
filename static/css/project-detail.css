@@ -16,20 +16,24 @@
     height: 100%;
     width: 65%;
     overflow-y: scroll;
+    padding: 0 20px;
 }
 
 .project .metadata-container {
     width: 30%;
-    height: 70%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: space-around;
+    justify-content: start;
+    gap: 20px;
+    overflow-y: scroll;
+    padding: 0 10px;
 }
 
 .metadata-container .metadata {
     width: 100%;
-    height: 90%;
+    height: 40%;
     background-color: var(--light-gold-color);
     box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
     border-radius: 20px;
@@ -53,6 +57,49 @@
     color: var(--blue-color);
 }
 
+.remarks {
+    width: 100%;
+    height: 40%;
+    padding: 0 20px;
+}
+
+.remarks p {
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: var(--blue-color);
+}
+
+.remarks p.all-remarks {
+    color: var(--gold-color);
+    margin-bottom: 20px;
+}
+
+.remarks .remark {
+    border-bottom: 1px solid var(--light-gold-color);
+    height: fit-content;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+}
+
+.remark h1 {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--blue-color)
+}
+
+.remark p.time {
+    color: var(--gold-color);
+    font-weight: 300;
+    margin-bottom: 10px;
+    font-size: 0.55rem;
+}
+
+.remark p.message {
+    color: var(--blue-color);
+    font-weight: normal;
+}
+
 .content .data {
     margin-bottom: 20px;
 }
@@ -68,6 +115,10 @@
     font-size: 0.7rem;
     text-align: justify;
     color: var(--blue-color);
+}
+
+.actions {
+    padding: 0 10px;
 }
 
 .actions a.btn {

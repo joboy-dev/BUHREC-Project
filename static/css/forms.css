@@ -20,6 +20,7 @@
     object-fit: cover;
     height: 100%;
     width: 100%;
+    mix-blend-mode: multiply;
 }
 
 form {
@@ -92,9 +93,25 @@ select option:checked {
     color: var(--gold-color);
 }
 
+textarea {
+    border: none;
+    box-shadow: var(--box-shadow);
+    border-radius: 20px;
+    height: 100px;
+    padding: 10px;
+    font-size: 0.5rem;
+    color: var(--blue-color);
+}
+
+textarea:focus {
+    outline: none;
+    border: 1px solid var(--gold-color);
+    box-shadow: none;
+}
+
 form input[type='submit'] {
     height: 50px;
-    width: 500px;
+    width: 200px;
     border: none;
     background-color: var(--blue-color);
     color: var(--white-color);

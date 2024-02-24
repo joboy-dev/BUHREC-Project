@@ -14,4 +14,6 @@ urlpatterns = [
     path('assignments/', views.AssignmentsView.as_view(), name='assignments'),
     path('project/<uuid:id>/toggle-approval/', views.ToggleApprovalProjectView.as_view(), name='toggle-approval'),
     
+    # ADMIN
+    path('dashboard/', views.AdminDashboardView.as_view(), name='admin-dashboard'),
 ]

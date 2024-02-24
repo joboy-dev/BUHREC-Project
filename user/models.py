@@ -110,15 +110,15 @@ class Admin(models.Model):
     # Roles
     CHAIR = 'chair'
     ASST_CHAIR = 'asst chair'
-    STAFF = 'staff'
     
     roles = [
         (CHAIR, 'Chair'),
         (ASST_CHAIR, 'Assistant chair'),
-        (STAFF, 'Staff'),
     ]
     
     id = models.UUIDField(default=uuid4, primary_key=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    role = models.CharField(choices=roles, default=STAFF, null=False, max_length=10)
+    role = models.CharField(choices=roles, default=CHAIR, null=False, max_length=10)
     
+    def __str__(self):
+        return self.user.email

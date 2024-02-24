@@ -1,0 +1,43 @@
+section#admin-dashbaord {
+    height: 100dvh;
+    width: 100%;
+}
+
+h1 {
+    font-size: 1rem;
+    color: var(--gold-color);
+    padding: var(--padding);
+}
+
+h1.projects {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--blue-color);
+}
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    /* animation: fadeDown 1s linear; */
+}
+
+tr.head th {
+    font-weight: 600;
+    font-size: 0.7rem;
+    padding: 10px;
+    text-align: justify;
+}
+
+tr {
+    /* animation: fadeSlide 1s linear; */
+}
+
+tr td {
+    font-weight: normal;
+    font-size: 0.6rem;
+    padding: 10px;
+    text-align: justify;
+    animation: fadeSlide 1s linear;
+
+}

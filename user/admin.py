@@ -13,7 +13,7 @@ User = get_user_model()
 class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password', 'first_name',
-         'last_name', 'profile_pic', 'role', 'payment_approved', 'track_no')}),
+         'last_name', 'profile_pic', 'role')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'is_verified', 'groups', 'user_permissions'),
         })

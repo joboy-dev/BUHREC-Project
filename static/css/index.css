@@ -11,6 +11,7 @@
 #hero .hero-content {
     text-align: center;
     margin-bottom: 40px;
+    animation: fadeDown 1s ease;
 }
 
 #hero .image-container {
@@ -18,12 +19,14 @@
     width: 50%;
     border-radius: 40px;
     overflow: hidden;
+    animation: fadeSlide 1s ease;
 }
 
 .image-container img {
     object-fit: cover;
     height: 100%;
     width: 100%;
+    mix-blend-mode: multiply;
 }
 
 .hero-content h1 {

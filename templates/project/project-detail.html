@@ -4,6 +4,7 @@
 {% block page_title %} Projects {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/project-detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
 {% block body %} 
@@ -32,7 +33,7 @@
                 <p>{{ project.justification | safe }}</p>
             </div>
             <div class="data">
-                <h1>Ojectives</h1>
+                <h1>Objectives</h1>
                 <p>{{ project.objectives | safe }}</p>
             </div>
 
@@ -60,9 +61,12 @@
         <div class="metadata-container">
             <div class="metadata">
                 <p>Project name: <span>{{ project.title }}</span></p>
-                <p>Author: <span>{{ project.owner.last_name }}, {{ project.owner.first_name }}</span></p>
+                <p>Author: <span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</span></p>
                 <p>Created at: <span>{{ project.created_at }}</span></p>
                 <p>Last updated: <span>{{ project.updated_at }}</span></p>
+                {% if project_reviewer %}
+                <p>Reviewer: <span>{{ project_reviewer.user.last_name }}, {{ project_reviewer.user.first_name }}</span></p>
+                {% endif %}
                 <p>
                     Approved: 
                     {% if project.approved %}
@@ -71,13 +75,13 @@
                     <span style="color: rgba(238, 107, 107);">No</span>
                     {% endif %}
                 </p>
-
             </div>
 
             <div class="actions">
                 {% if user.role == 'student' or user.role == 'researcher' %}
                 <a href="{% url 'project:edit-project' project.id %}" class="btn">Edit</a>
                 <a href="" class="btn delete">Delete</a>
+
                 {% elif user.role == 'reviewer' %}
                 <form action="{% url 'project:toggle-approval' project.id %}" method="post">
                     {% csrf_token %}
@@ -88,6 +92,32 @@
                     {% endif %}
                 </form>
                 {% endif %}
+            </div>
+
+            <div class="remarks">
+                {% if user.role == 'reviewer' %}
+                <form action="" method="post">
+                    <p>Send Remark</p>
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" class="btn" value="Send Remark">
+                </form>
+                {% endif %}
+
+                <div>
+                    <p class="all-remarks">All remarks</p>
+                    {% if remarks %}
+                        {% for remark in remarks %}
+                        <div class="remark">
+                            <h1>{{ remark.reviewer.user.last_name }}, {{ remark.reviewer.user.first_name }}</h1>
+                            <p class="time">{{ remark.created_at }}</p>
+                            <p class="message">{{ remark.message }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p>No remarks yet</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

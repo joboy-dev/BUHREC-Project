@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views import View, generic
@@ -7,7 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from datetime import datetime
 
-from project.models import Project, Reviewer, Assignment
+from project.models import Project, Reviewer, Assignment, Remark
+from user.models import Admin, StudentOrResearcher
 from user.permissions import IsReviewer, IsStudentOrResearcher
 from . import forms
 
@@ -53,7 +54,9 @@ class ProjectsView(LoginRequiredMixin, generic.ListView):
         return super().dispatch(request)
     
     def get(self, request):
-        projects = Project.objects.filter(owner=self.request.user)
+        projects = Project.objects.filter(
+            owner=StudentOrResearcher.objects.get(user=request.user)
+        )
         context['active_link'] = 'projects'
         context['projects'] = projects
         return render(request, self.template_name, context)
@@ -91,29 +94,9 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
         form = self.form_class(request.POST)
         
         if form.is_valid():
-            title = form.cleaned_data['title']
-            introduction = form.cleaned_data['introduction']
-            background = form.cleaned_data['background']
-            scope_and_limitation = form.cleaned_data['scope_and_limitation']
-            justification = form.cleaned_data['justification']
-            objectives = form.cleaned_data['objectives']
-            hypothesis = form.cleaned_data['hypothesis']
-            literature_review = form.cleaned_data['literature_review']
-            materials_and_methods = form.cleaned_data['materials_and_methods']
-            procedure = form.cleaned_data['procedure']
-            
             project = Project.objects.create(
-                title=title,              
-                introduction=introduction,              
-                background=background,                
-                scope_and_limitation=scope_and_limitation,                
-                justification=justification,                
-                objectives=objectives,                
-                hypothesis=hypothesis,                
-                literature_review=literature_review,                
-                materials_and_methods=materials_and_methods,                
-                procedure=procedure,        
-                owner=request.user        
+                **form.cleaned_data,       
+                owner=StudentOrResearcher.objects.get(user=request.user)
             )
             
             # Create assignment
@@ -130,7 +113,7 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
         return render(request, self.template_name, context)
     
 
-class GetProjectDetail(LoginRequiredMixin, generic.DetailView):
+class GetProjectDetail(LoginRequiredMixin, View):
     '''View to get details about a particular project'''
     
     login_url = 'user:login'
@@ -138,12 +121,60 @@ class GetProjectDetail(LoginRequiredMixin, generic.DetailView):
     model = Project
     template_name = 'project/project-detail.html'
     context_object_name = 'project'
+    success_message = 'Remark sent successfully'
+    
+    permission_required = 'user.is_reviewer'
+    permission_denied_message = 'Access denied as you are not a reviewer'
     
     def get(self, request, id):
         project = self.model.objects.get(id=id)
+        
+        # get all remarks
+        remarks = Remark.objects.filter(project=project)
+        # get reviewer for project through assignments
+        project_reviewer = Assignment.objects.get(project=project).reviewer
+        
+        context['form'] = forms.AddRemarkForm()
         context['project'] = project
-        context['active_link'] = 'projects'
+        context['remarks'] = remarks
+        context['project_reviewer'] = project_reviewer
+        
+        if request.user.role == 'student':
+            context['active_link'] = 'projects'
+        elif request.user.role == 'reviewer':
+            context['active_link'] = 'assignments'
+            
         return render(request, self.template_name, context)
+    
+    def post(self, request, id):
+        form = forms.AddRemarkForm(request.POST)
+        
+        if form.is_valid():
+            message = form.cleaned_data['message']
+            user = request.user
+            
+            # Permission check
+            if not IsReviewer.has_permission(request, user):
+                messages.error(request, f'{self.permission_denied_message}')
+            else:
+                # create remark
+                project = Project.objects.get(id=id)
+                reviewer = Reviewer.objects.get(user=user)
+                Remark.objects.create(
+                    message=message,
+                    project=project,
+                    reviewer=reviewer,
+                )
+                messages.success(request, f'{self.success_message}')
+                return redirect(reverse_lazy('project:assignments'))
+                        
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+        
+        return render(request, self.template_name, context)
+                
     
 
 class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
@@ -168,7 +199,7 @@ class EditProjectView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateVie
         if not IsStudentOrResearcher.has_permission(request, user):
             messages.error(request, f'{self.permission_denied_message}')
             return redirect(reverse_lazy('project:home'))
-        return super().dispatch(request)
+        return super().dispatch(request, id)
     
     def get(self, request, id):
         project = Project.objects.get(id=id)
@@ -205,7 +236,7 @@ class AssignmentsView(LoginRequiredMixin, View):
     def get(self, request):
         reviewer = Reviewer.objects.get(user=request.user)
         # get all assignments
-        assignments = Assignment.objects.filter(reviewer=reviewer)
+        assignments = Assignment.objects.filter(reviewer=reviewer, is_complete=False)
         completed_assignments = Assignment.objects.filter(reviewer=reviewer, is_complete=True)
         
         context['active_link'] = 'assignments'
@@ -254,9 +285,8 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
         
         messages.success(request, 'Approval status changed')
         return redirect(reverse_lazy('project:assignments'))
+                
     
-    
-
 ################################################
 ################################################
 
@@ -265,6 +295,12 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
 class AdminDashboardView(LoginRequiredMixin, View):
     '''View for admin to see their dashboard'''
     
-           
+    def get(self, request):
+        admin = Admin.objects.get(user=request.user)
+        projects = Project.objects.all()
+        context['active_link'] = 'dashboard'
+        context['admin'] = admin
+        context['projects'] = projects
+        return render(request, 'admin/admin-dashboard.html', context)
     
         

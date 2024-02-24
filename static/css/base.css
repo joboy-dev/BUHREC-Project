@@ -1,8 +1,7 @@
 :root {
    --blue-color: #161B5F;
    --gold-color: #B28D1B;
-   /* --white-color: #F0F1F6; */
-   --white-color: #FFFFFF;
+   --white-color: #F0F1F6;
    --light-gold-color: #E5D49E;
    --padding: 20px 120px;
    --box-shadow: 2px 4px 8px rgb(0, 0, 0, 0.3);
@@ -12,10 +11,48 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    transition: ease 0.3s;
+    transition: 0.3s linear;
     scroll-behavior: smooth;
     font-family: 'Poppins', 'Open Sans', sans-serif;
 }
+
+/* ANIMATIONS */
+
+@keyframes fadeSlide {
+    from {
+        translate: -50px 0;
+        opacity: 0;
+    }
+
+    to {
+        translate: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        translate: 0 -50px;
+        opacity: 0;
+    }
+
+    to {
+        translate: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUpDown {
+    from {
+        scale: 1.1;
+    }
+
+    to {
+        scale: 1;
+    }
+}
+
+
 
 html {
     font-size: 30px;
@@ -117,6 +154,8 @@ nav .nav-links a {
 
 nav a.active {
     color: var(--blue-color);
+    animation: scaleUpDown 1s infinite;
+    font-weight: 600;
 }
 
 /* SCROLL BAR */
@@ -202,7 +241,6 @@ footer p {
 .info {
     background-color: rgba(255, 249, 158, 0.8);
 }
-
 
 /* BREADCRUMB */
 .breadcrumb {

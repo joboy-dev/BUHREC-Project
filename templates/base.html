@@ -30,6 +30,8 @@
                     <a href="{% url 'project:projects' %}" class="{% if active_link == 'projects' %}active{% endif %}">Projects</a>
                     {% elif user.role == 'reviewer' %}
                     <a href="{% url 'project:assignments' %}" class="{% if active_link == 'assignments' %}active{% endif %}">Assignments</a>
+                    {% elif user.role == 'admin' %}
+                    <a href="{% url 'project:admin-dashboard' %}" class="{% if active_link == 'dashboard' %}active{% endif %}">Dashboard</a>
                     {% endif %}
                 {% else %}
                 <a href="{% url 'user:login' %}" class="{% if active_link == 'login' %}active{% endif %}">Login</a>

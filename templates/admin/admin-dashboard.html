@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} Dashboard {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block body %} 
+<section id="admin-dashboard">
+    
+    <h1>Dashboard</h1>
+    {% if admin.role == 'chair' %}
+        {% if projects %}
+        <h1 class="projects">All Projects</h1>
+        <table>
+            <tr class="head">
+                <th>Title</th>
+                <th>Level</th>
+                <th>Program</th>
+                <th>Name</th>
+                <th>Track id</th>
+                <th>Amount paid</th>
+                <th>Assign reviewer</th>
+            </tr>
+
+            {% for project in projects %}
+            <tr>
+                <th>{{ project.title }}</th>
+                <th>{{ project.owner.degree.capitalize }}</th>
+                <th>{{ project.owner.programme.capitalize }}</th>
+                <th>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</th>
+                <th>{{ project.track_id}} </th>
+                <th>Amount paid</th>
+                <th>Assign reviewer</th>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p class="nothing">No projects available</p>
+        {% endif %}
+
+    {% elif admin.role == 'asst chair' %}
+        {% if projects %}
+        <h1 class="projects">All Projects</h1>
+        <table>
+            <tr class="head">
+                <th>Title</th>
+                <th>Level</th>
+                <th>Program</th>
+                <th>Name</th>
+                <th>Track id</th>
+                <th>Amount paid</th>
+                <th>Assign reviewer</th>
+            </tr>
+
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.title }}</td>
+                <td>{{ project.owner.degree.capitalize }}</td>
+                <td>{{ project.owner.programme.capitalize }}</td>
+                <td>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</td>
+                <td>{{ project.track_id}} </td>
+                <td>Amount paid</td>
+                <td>Assign reviewer</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p class="nothing">No projects available</p>
+        {% endif %}
+
+    {% endif %}
+    
+</section>
+{% endblock %}
