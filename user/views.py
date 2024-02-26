@@ -236,6 +236,14 @@ class UserDetailsView(LoginRequiredMixin, View):
     '''View to get user details'''
     
     def get(self, request):
+        user = request.user
+        if user.role == 'student' or user.role == 'researcher':
+            context['student_researcher'] = StudentOrResearcher.objects.get(user=user)
+        elif user.role == 'reviewer':
+            context['reviewer'] = Reviewer.objects.get(user=user)
+        elif user.role == 'admin':
+            context['admin'] = Admin.objects.get(user=user)
+            
         return render(request, 'user/profile.html', context)
         
 

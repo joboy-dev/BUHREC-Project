@@ -3,7 +3,7 @@
 
 {% block page_title %} About {% endblock %}
 {% block styles %}
-
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block body %} 
@@ -13,6 +13,42 @@
     </div>
 
     <div class="content">
+        <div class="pic-container">
+            <div class="img-container">
+                <img src="{{ user.profile_pic.url }}" alt="profile-pic">
+            </div>
+            <a href="#modal" class="btn">Update picture</a>
+        </div>
+
+        <div class="details">
+            <h1>{{ user.last_name}}, <span>{{ user.first_name }}</span></h1>
+            <p class="email">{{ user.email }}</p>
+            <p class="other">Role: <span>{{ user.role.capitalize }}</span></p>
+            <div class="hr"></div>
+            
+            {% if user.role == 'student' %}
+            <h1>Student profile</h1>
+            <p class="other">Degree: <span>{{ student_researcher.degree.capitalize }}</span></p>
+            <p class="other">Programme: <span>{{ student_researcher.programme.capitalize }}</span></p>
+
+            {% elif user.role == 'researcher' %}
+            <h1>Researcher profile</h1>
+            <p class="other">Degree: <span>{{ student_researcher.degree.capitalize }}</span></p>
+            <p class="other">PG degree: <span>{{ student_researcher.pg_degree.capitalize }}</span></p>
+            <p class="other">Programme: <span>{{ student_researcher.programme.capitalize }}</span></p>
+
+            {% elif user.role == 'reviewer' %}
+            <h1>Reviewer profile</h1>
+            <p class="other">Country domicile: <span>{{ reviewer.country_domicile }}</span></p>
+            <p class="other">Institution name: <span>{{ reviewer.institution_name }}</span></p>
+            <p class="other">Years of reviewing: <span>{{ reviewer.years_of_reviewing }}</span></p>
+
+            {% elif user.role == 'admin' %}
+            <h1>Admin profile</h1>
+            <p class="other">Role: <span>{{ admin.role.capitalize }} admin</span></p>
+
+            {% endif %}
+        </div>
 
     </div>
 

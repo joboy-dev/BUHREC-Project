@@ -2,7 +2,7 @@
    --blue-color: #161B5F;
    --gold-color: #B28D1B;
    --white-color: #F0F1F6;
-   --light-gold-color: #E5D49E;
+   --light-gold-color: #f1e7c2;
    --green-color: rgba(47, 168, 108);
    --red-color: rgba(238, 107, 107);
    --padding: 20px 120px;
@@ -301,7 +301,7 @@ footer p {
 
 /* BREADCRUMB */
 .breadcrumb {
-    height: 200px;
+    height: 20%;
     width: 100%;
     background-color: var(--light-gold-color);
     display: flex;
@@ -320,8 +320,9 @@ footer p {
 
 /* LINE */
 .hr {
-    height: 1px;
-    width: 88%;
+    height: 2px;
+    width: 100%;
     background-color: var(--blue-color);
     margin: 10px auto;
+    box-shadow: var(--box-shadow);
 }

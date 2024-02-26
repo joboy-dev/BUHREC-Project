@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views import View, generic
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 
 from uuid import uuid4
 from datetime import datetime
@@ -11,12 +11,14 @@ from datetime import datetime
 from project.models import Project, Reviewer, Assignment, Remark
 from project.permissions import IsProjectOwner
 from user.models import Admin, StudentOrResearcher
-from user.permissions import IsAdmin, IsAsstChairAdmin, IsReviewer, IsStudentOrResearcher
+from user.permissions import IsAdmin, IsAsstChairAdmin, IsChairAdmin, IsReviewer, IsStudentOrResearcher
 from . import forms
 
 context = {
     'year': datetime.now().year
 }
+
+User = get_user_model()
 
 # Create your views here.
 class HomeView(View):
@@ -131,7 +133,7 @@ class GetProjectDetail(LoginRequiredMixin, View):
     def get(self, request, id):
         project = get_object_or_404(Project, id=id)
         
-        # get all remarks
+        # get all remarks for a project
         remarks = Remark.objects.filter(project=project)
         # get reviewer for project through assignments
         project_reviewer = Assignment.objects.get(project=project).reviewer
@@ -338,7 +340,6 @@ class AdminDashboardView(LoginRequiredMixin, View):
     permission_required = 'user.is_admin'
     permission_denied_message = 'Access denied as you are not n admin'
     
-    
     def dispatch(self, request):
         user = request.user
         # check permission
@@ -349,13 +350,17 @@ class AdminDashboardView(LoginRequiredMixin, View):
     
     def get(self, request):
         admin = Admin.objects.get(user=request.user)
+        assignments = Assignment.objects.all()
         projects = Project.objects.all()
         unassigned_projects = Project.objects.filter(track_id=None)
+        reviewers = Reviewer.objects.all()
         
         context['active_link'] = 'dashboard'
         context['admin'] = admin
+        context['assignments'] = assignments
         context['projects'] = projects
         context['unassigned_projects'] = unassigned_projects
+        context['reviewers'] = reviewers
         return render(request, 'admin/admin-dashboard.html', context)
     
 
@@ -367,7 +372,7 @@ class AssignProjectTrackIdView(LoginRequiredMixin, View):
     def post(self, request, id):
         admin = Admin.objects.get(user=request.user)
         if not IsAsstChairAdmin.has_permission(request, admin):
-            messages.error(request, 'Access denied as you are not a chair admin')
+            messages.error(request, 'Access denied as you are not an assistant chair admin')
             return redirect(reverse_lazy('project:home'))
         
         project = get_object_or_404(Project, id=id)
@@ -379,5 +384,91 @@ class AssignProjectTrackIdView(LoginRequiredMixin, View):
         return redirect(reverse_lazy('project:admin-dashboard'))
         
     
+class GiveAssignmentView(LoginRequiredMixin, View):
+    '''View for admin chair to give assignments from a reviewer'''
     
+    login_url = 'user:login'
+    
+    def post(self, request, id):
+        admin = Admin.objects.get(user=request.user)
+        if not IsChairAdmin.has_permission(request, admin):
+            messages.error(request, 'Access denied as you are not a chair admin')
+            return redirect(reverse_lazy('project:home'))
         
+        assignment = get_object_or_404(Assignment, id=id)
+        
+        # Get reviewer email from form select field and strip it down
+        reviewer_email = request.POST['reviewer'].strip()
+        
+        # Check if user selected a reviewer
+        if reviewer_email == 'none':
+            messages.error(request, 'Select a reviewer')
+            return redirect(reverse_lazy('project:admin-dashboard'))
+        
+        # user = User.objects.get(email=reviewer_email)
+        
+        # Get user based on the email gotten from the form
+        user = get_object_or_404(User, email=reviewer_email)
+        
+        # Get reviewer based on the user object
+        reviewer = get_object_or_404(Reviewer, user=user)
+        
+        # Update reviewer data
+        reviewer.pending_assignments_no += 1
+        # Assign reviewer object to the assignment
+        assignment.reviewer = reviewer
+        
+        assignment.save()
+        reviewer.save()
+        
+        messages.success(request, f"Reviewer '{reviewer.user}' assigned to project '{assignment.project.title}'.")
+        return redirect(reverse_lazy('project:admin-dashboard'))
+        
+        
+class WithdrawAssignmentView(LoginRequiredMixin, View):
+    '''View for admin chair to withdraw assignments from a reviewer'''
+    
+    login_url = 'user:login'
+    
+    def post(self, request, id):
+        admin = Admin.objects.get(user=request.user)
+        if not IsChairAdmin.has_permission(request, admin):
+            messages.error(request, 'Access denied as you are not a chair admin')
+            return redirect(reverse_lazy('project:home'))
+        
+        assignment = get_object_or_404(Assignment, id=id)
+        
+        # Get reviewer based on the reviewer linked to assignment
+        reviewer = get_object_or_404(Reviewer, id=assignment.reviewer.id)
+        
+        # Update reviewer data
+        reviewer.pending_assignments_no -= 1
+        reviewer.withdrawn_assignments_no += 1 
+        # Assign reviewer object to the assignment
+        assignment.reviewer = None
+        
+        assignment.save()
+        reviewer.save()
+        
+        messages.success(request, f"Reviewer '{reviewer.user}' removed from project '{assignment.project.title}'.")
+        return redirect(reverse_lazy('project:admin-dashboard'))
+
+
+class SearchProjectsView(LoginRequiredMixin, View):
+    '''View to search for projects'''
+    
+    login_url = 'user:login'
+    
+    def post(self, request):
+        search_term = request.POST['search']
+        projects = Project.objects.filter(title=search_term)
+        
+        context['searched_projetcs'] = projects
+        
+        if len(projects) == 0:
+            messages.error(request, 'No results found.')
+        else:
+            messages.success(request, f'{len(projects)} result(s) found.')
+            
+        return render(request, 'admin/admin-dashboard.html', context)
+    

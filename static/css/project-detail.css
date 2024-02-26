@@ -75,11 +75,51 @@
 }
 
 .remarks .remark {
-    border-bottom: 1px solid var(--light-gold-color);
     height: fit-content;
     width: 100%;
-    margin-bottom: 10px;
-    padding: 5px 10px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    box-shadow: var(--box-shadow);
+    background-color: white;
+    border-radius: 20px;
+}
+
+label {
+    display: none;
+}
+
+textarea {
+    border: none;
+    box-shadow: var(--box-shadow);
+    border-radius: 20px;
+    height: 150px;
+    padding: 10px;
+    font-size: 0.5rem;
+    color: var(--blue-color);
+    margin: 10px 0;
+    width: 100%;
+}
+
+textarea:focus {
+    outline: none;
+    border: 1px solid var(--gold-color);
+    box-shadow: none;
+}
+
+form input[type='submit'] {
+    height: 50px;
+    width: 150px;
+    border: none;
+    background-color: var(--blue-color);
+    color: var(--white-color);
+    border-radius: 10px;
+    font-size: 0.6rem;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px;
+}
+
+form input[type='submit']:hover {
+    box-shadow: none;
 }
 
 .remark h1 {
@@ -91,7 +131,7 @@
 .remark p.time {
     color: var(--gold-color);
     font-weight: 300;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-size: 0.55rem;
 }
 

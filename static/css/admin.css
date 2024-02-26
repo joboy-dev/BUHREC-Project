@@ -9,7 +9,7 @@ h1 {
     padding: 10px 120px;
 }
 
-form {
+form.search-form {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,7 +17,7 @@ form {
     padding: var(--padding);
 }
 
-form input[type='text'] {
+form.search-form input[type='text'] {
     border: none;
     outline: none;
     height: 50px;
@@ -29,7 +29,7 @@ form input[type='text'] {
     color: var(--blue-color);
 }
 
-form input:focus {
+form.search-form input:focus {
     box-shadow: none;
     border: 1px solid var(--gold-color);
 }
@@ -75,7 +75,8 @@ tr.table-head th {
     font-weight: 600;
     font-size: 0.7rem;
     padding: 10px;
-    text-align: justify;
+    text-align: left;
+    color: var(--blue-color);
     animation: fadeDown 1s linear;
 
 }
@@ -84,8 +85,58 @@ tr td {
     font-weight: normal;
     font-size: 0.6rem;
     padding: 10px;
-    text-align: justify;
+    text-align: left;
     animation: fadeSlide 1s linear;
+    width: 40dvw;
+}
+
+tr td:first-child {
+    font-weight: 500;
+    color: var(--gold-color);
+}
+
+form.assign-form {
+    width: 20dvw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.assign-form select {
+    border: none;
+    outline: none;
+    height: 45px;
+    width: 70%;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
+    font-size: 0.6rem;
+    color: var(--blue-color);
+}
+
+.assign-form select:focus {
+    box-shadow: none;
+    border: 1px solid var(--gold-color);
+}
+
+.assign-form div.name {
+    height: 45;
+    width: 70%;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
+    font-size: 0.6rem;
+    color: var(--gold-color);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background-color: white;
+}
+
+.assign-form input[type='submit'] {
+    width: 30%;
+    height: 45px;
 }
 
 

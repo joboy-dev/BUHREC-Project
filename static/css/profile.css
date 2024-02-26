@@ -1,0 +1,74 @@
+#profile-section {
+    height: 100vh;
+    width: 100%;
+}
+
+.content {
+    padding: var(--padding);
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content .pic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.content .img-container {
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.img-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.content .details {
+    width: 60%;
+}
+
+.details h1:first-child {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.details h1 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.details h1 span {
+    color: var(--gold-color);
+}
+
+.details p.email {
+    color: var(--gold-color);
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.details p.other {
+    color: var(--blue-color);
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.details p.other span {
+    color: var(--gold-color);
+    font-weight: 500;
+}
+
+a.btn {
+    background-color: var(--gold-color);
+}

@@ -1,5 +1,18 @@
 from django.contrib.auth.models import Permission
 
+class IsObjectOwner(Permission):
+    '''
+    Permission to check is an object is being accessed by the right owner.
+    The objects in view here are StudentResearcher, Admin, and Reviewer.
+    '''
+    
+    name = 'Is object owner'
+    codename = 'is_object_owner'
+    
+    @staticmethod
+    def has_permission(request, obj):
+        return obj.user == request.user
+
 class IsStudentOrResearcher(Permission):
     '''Permission to check is a user's role is a student or researcher'''
     

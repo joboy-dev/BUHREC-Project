@@ -18,4 +18,8 @@ urlpatterns = [
     # ADMIN
     path('dashboard/', views.AdminDashboardView.as_view(), name='admin-dashboard'),
     path('project/<uuid:id>/assign-track-id/', views.AssignProjectTrackIdView.as_view(), name='assign-track-id'),
+    path('assignment/<uuid:id>/assign-reviewer/', views.GiveAssignmentView.as_view(), name='assign-reviewer'),
+    path('assignment/<uuid:id>/withdraw/', views.WithdrawAssignmentView.as_view(), name='withdraw-assignment'),
+    
+    path('project/search/', views.SearchProjectsView.as_view(), name='search-project'),
 ]
