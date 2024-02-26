@@ -37,6 +37,12 @@ class AboutView(View):
         return render(request, 'about.html', context)
     
 
+##################################################################################
+##################################################################################
+##################################################################################
+
+# STUDENT / RESEARCHER VIEWS
+
 class ProjectsView(LoginRequiredMixin, generic.ListView):
     '''View to get all projects'''
     
@@ -180,7 +186,6 @@ class GetProjectDetail(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
                 
     
-
 class EditProjectView(LoginRequiredMixin, generic.UpdateView):
     '''View to edit a project'''  
     
@@ -249,8 +254,10 @@ class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
         return redirect(self.success_url)
     
     
-#########################################################
-#########################################################
+
+##################################################################################
+##################################################################################
+##################################################################################
 
 # REVIEWER VIEWS
 
@@ -326,9 +333,11 @@ class ToggleApprovalProjectView(LoginRequiredMixin, View):
         messages.success(request, 'Approval status changed')
         return redirect(reverse_lazy('project:assignments'))
                 
-    
-################################################
-################################################
+
+
+##################################################################################
+##################################################################################
+##################################################################################
 
 # ADMIN VIEWS
         
