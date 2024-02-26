@@ -22,6 +22,21 @@ def is_valid_password(password):
         return True
     else:
         return False
+    
+# For reusablility
+def form_text_field(field, widget, placeholder):
+    '''Form text field '''
+    
+    return field(max_length=200, required=True, widget=widget(attrs={'placeholder': placeholder}))
+
+def form_select_field(choices):
+    '''Form select field '''
+    
+    return forms.CharField(max_length=200, required=True, widget=forms.Select(choices=choices))
+
+
+############################################################################
+############################################################################
 
 class UserChangeForm(UserChangeForm):
     class Meta:
@@ -31,6 +46,10 @@ class UserCreationForm(UserCreationForm):
     class Meta:
         fields = ["email",]
         
+
+############################################################################
+############################################################################
+############################################################################
 
 # Custom forms
 class SignUpForm(forms.Form):
@@ -49,13 +68,12 @@ class SignUpForm(forms.Form):
         (ADMIN, 'Admin'),
     ]
     
-    first_name = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder': 'First name', 'class': 'input-field'}))
-    last_name = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder': 'Last name', 'class': 'input-field'}))
-    email = forms.EmailField(max_length=200, required=True, widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'input-field'}))
-    password = forms.CharField(max_length=200, min_length=8, required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input-field'}))
-    confirm_password = forms.CharField(max_length=200, min_length=8, required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password', 'class': 'input-field'}))
-    role = forms.CharField(max_length=200, required=True, widget=forms.Select(choices=roles))
-    
+    first_name = form_text_field(forms.CharField, forms.TextInput, 'First name')
+    last_name = form_text_field(forms.CharField, forms.TextInput, 'Last name')
+    email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
+    password = form_text_field(forms.CharField, forms.PasswordInput, 'Password')
+    confirm_password = form_text_field(forms.CharField, forms.PasswordInput, 'Confirm Password')
+    role = form_select_field(roles)
     
     def clean(self):
         cleaned_data = super().clean()  # Call parent's clean method first
@@ -81,8 +99,8 @@ class SignUpForm(forms.Form):
 class LoginForm(forms.Form):
     '''Login form'''
     
-    email = forms.EmailField(max_length=200, required=True, widget=forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'input-field'}))
-    password = forms.CharField(max_length=200, min_length=8, required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'input-field'}))
+    email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
+    password = form_text_field(forms.CharField, forms.PasswordInput, 'Password')
 
 
 class StudentResearcherForm(forms.ModelForm):
@@ -112,16 +130,15 @@ class StudentResearcherForm(forms.ModelForm):
 class ReviewerForm(forms.ModelForm):
     '''Form to set up reviewer profile'''
     
-    country_domicile = forms.CharField(max_length=200, required=True, widget=forms.Select(choices=get_all_countries()))
-    institution_name = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'placeholder': 'Institution name', 'class': 'input-field'}))
-    years_of_reviewing = forms.CharField(max_length=200, required=True, widget=forms.NumberInput(attrs={'placeholder': 'Years of reviewing', 'class': 'input-field'}))
+    country_domicile = form_select_field(get_all_countries())    
+    institution_name = form_text_field(forms.CharField, forms.TextInput, 'Institution name')
+    years_of_reviewing = form_text_field(forms.CharField, forms.NumberInput, 'Years of reviewing')
     
     class Meta:
         model = Reviewer
         fields = ['country_domicile', 'institution_name', 'years_of_reviewing']
     
     
-
 class AdminForm(forms.ModelForm):
     '''Form to set up admin profile'''
     
@@ -129,3 +146,60 @@ class AdminForm(forms.ModelForm):
         model = Admin
         fields = '__all__'
         exclude = ['id', 'user']
+        
+
+class ChangeProfilePictureForm(forms.ModelForm):
+    '''Form to change profile picture'''
+    
+    class Meta:
+        model = User
+        fields = ['profile_pic']
+        
+
+class ChangeEmailForm(forms.Form):
+    '''Form to change email'''
+    
+    email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
+        
+    def clean(self):
+        cleaned_data = super().clean()  # Call parent's clean method first
+
+        email = cleaned_data.get('email')
+        
+        # Email uniqueness
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email already exists!')
+        
+        return cleaned_data
+        
+
+class ChangeDetailsForm(forms.Form):
+    '''Form to change user details'''
+    
+    first_name = form_text_field(forms.CharField, forms.TextInput, 'First name')
+    last_name = form_text_field(forms.CharField, forms.TextInput, 'Last name')
+        
+
+class ChangePasswordForm(forms.Form):
+    '''Form to change profile picture'''
+    
+    email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
+    password = form_text_field(forms.CharField, forms.PasswordInput, 'Password')
+    confirm_password = form_text_field(forms.CharField, forms.PasswordInput, 'Confirm Password')
+    
+    def clean(self):
+        cleaned_data = super().clean()  # Call parent's clean method first
+
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('confirm_password')
+        
+        # Password checks
+        if password != password2:
+            raise forms.ValidationError('Passwords do not match!')
+
+        if not is_valid_password(password):
+            raise forms.ValidationError('Password should have uppercase, lowercase, special character and should have at least 8 characters')
+        
+        return cleaned_data
+    
+    

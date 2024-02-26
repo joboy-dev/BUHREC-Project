@@ -51,7 +51,7 @@ form label {
     display: none;
 }
 
-form .input-field {
+form input {
     border: none;
     outline: none;
     height: 50px;
@@ -63,7 +63,7 @@ form .input-field {
     color: var(--blue-color);
 }
 
-form .input-field:focus {
+form input:focus {
     box-shadow: none;
     border: 1px solid var(--gold-color);
 }
@@ -118,6 +118,7 @@ form input[type='submit'] {
     border-radius: 10px;
     font-size: 0.6rem;
     box-shadow: var(--box-shadow);
+    padding: 0;
 }
 
 form input[type='submit']:hover {

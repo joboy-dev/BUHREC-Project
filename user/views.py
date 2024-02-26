@@ -237,6 +237,10 @@ class UserDetailsView(LoginRequiredMixin, View):
     
     def get(self, request):
         user = request.user
+        
+        change_picture_form = forms.ChangeProfilePictureForm()
+        context['change_picture_form'] = change_picture_form
+        
         if user.role == 'student' or user.role == 'researcher':
             context['student_researcher'] = StudentOrResearcher.objects.get(user=user)
         elif user.role == 'reviewer':
@@ -245,6 +249,37 @@ class UserDetailsView(LoginRequiredMixin, View):
             context['admin'] = Admin.objects.get(user=user)
             
         return render(request, 'user/profile.html', context)
+    
+
+class ChangeProfilePictureView(LoginRequiredMixin, View):
+    '''View to update profile picture for a user'''
+    
+    def post(self, request):    
+        change_picture_form = forms.ChangeProfilePictureForm(request.POST, request.FILES)
+        
+        if change_picture_form.is_valid():
+            profile_pic = change_picture_form.cleaned_data['profile_pic']
+            print(f"PROFILE PIC ---- {profile_pic}")
+
+            # Save changes
+            request.user.profile_pic = profile_pic
+            request.user.save()
+            
+            messages.success(request, 'Profile picture updated successfully')
+            return redirect(reverse_lazy('user:profile'))
+            
+        
+        context['change_picture_form'] = change_picture_form
+        for field, errors in change_picture_form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, 'user/profile.html', context)
+    
+
+class ChangeEmailView(LoginRequiredMixin, View):
+    '''View to change a user's email'''
+        
         
 
 def logout_view(request):

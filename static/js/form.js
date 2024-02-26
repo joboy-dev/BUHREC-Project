@@ -1,7 +1,13 @@
-const form = document.querySelector('.assign-form')
+// FILE UPLOAD FORM
+const fileUploadForm = document.querySelector('.upload-form')
+const updateButton = document.querySelector('button.update')
 
-form.addEventListener('submit', function() {
-    let uuidString = document.getElementById('reviewer').value
-    let uuidValue = uuidString.replace(/['"]+/g, '')
-    document.getElementById('reviewer').value = uuidValue
+updateButton.addEventListener('click', function() {
+    fileUploadForm.classList.toggle('show')
+    fileUploadForm.classList.toggle('hide')
+
+    updateButton.textContent = fileUploadForm.classList.contains('hide') ? 'Update' : 'Cancel'
+    updateButton.style.backgroundColor = fileUploadForm.classList.contains('hide') ? '#B28D1B' : 'rgba(238, 107, 107)'
 })
+
+

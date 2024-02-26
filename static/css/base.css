@@ -22,7 +22,7 @@
 
 @keyframes fadeSlide {
     from {
-        translate: -50px 0;
+        translate: -20px 0;
         opacity: 0;
     }
 
@@ -34,7 +34,7 @@
 
 @keyframes fadeDown {
     from {
-        translate: 0 -50px;
+        translate: 0 -20px;
         opacity: 0;
     }
 

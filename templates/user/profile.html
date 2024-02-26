@@ -17,7 +17,13 @@
             <div class="img-container">
                 <img src="{{ user.profile_pic.url }}" alt="profile-pic">
             </div>
-            <a href="#modal" class="btn">Update picture</a>
+            <button class="btn update show">Update</button>
+            <form action="{% url 'user:change-profile-picture' %}" method="post" enctype="multipart/form-data" class="upload-form hide">
+                {% csrf_token %}
+                {{ change_picture_form }}
+                <!-- <input type="file" name="profile-pic"> -->
+                <input type="submit" value="Save">
+            </form>
         </div>
 
         <div class="details">
@@ -53,4 +59,5 @@
     </div>
 
 </section>
+<script src="{% static 'js/form.js' %}"></script>
 {% endblock %}

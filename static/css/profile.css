@@ -43,7 +43,7 @@
 }
 
 .details h1 {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--blue-color);
 }
@@ -69,6 +69,55 @@
     font-weight: 500;
 }
 
-a.btn {
+a.btn, button.btn.update {
     background-color: var(--gold-color);
+    margin-bottom: 20px;
+}
+
+
+/* FORM */
+form.upload-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+}
+
+
+input[type='file'] {
+    background-color: white;
+    height: 40px;
+    width: 100%;
+    box-shadow: var(--box-shadow);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+input[type='submit'] {
+    background-color: var(--blue-color);
+    border: none;
+    color: var(--white-color);
+    height: 40px;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.3);
+}
+
+input[type='submit']:hover {
+    box-shadow: none;
+}
+
+/* DISPLAY FORM */
+form.hide {
+    display: none;
+}
+
+form.show {
+    display: block;
+    animation: fadeDown 0.5s linear;
+}
+
+form label {
+    display: none;
 }
