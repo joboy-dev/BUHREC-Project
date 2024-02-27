@@ -10,11 +10,11 @@ BUHREC is a user-friendly and comprehensive web application designed to simplify
     - Django
 
 ## Key Features
-1. *Versatile User Roles*: Choose from four distinct roles: Student, Researcher, Reviewer, and Admin. Each role comes with tailored functionalities to ensure a smooth workflow.
-2. *Streamlined Project Management*: Students and researchers can effortlessly create, edit, and delete their projects, gaining full control over their project journey.
-3. *Comprehensive Review Process*: Reviewers can thoroughly examine assigned projects, providing valuable feedback through approvals, disapprovals, and detailed remarks.
-4. *Efficient Administration*: Admins, specifically Chair and Assistant Chair, play a crucial role in managing the overall process. Chair admins can assign and withdraw reviewers, while assistant chair admins can allocate automatic track IDs for each project.
-5. *Seamless Integration*: BUHREC seamlessly integrates with existing school systems, ensuring a smooth transition into your current infrastructure.
+1. **Versatile User Roles**: Choose from four distinct roles: Student, Researcher, Reviewer, and Admin. Each role comes with tailored functionalities to ensure a smooth workflow.
+2. **Streamlined Project Management**: Students and researchers can effortlessly create, edit, and delete their projects, gaining full control over their project journey.
+3. **Comprehensive Review Process**: Reviewers can thoroughly examine assigned projects, providing valuable feedback through approvals, disapprovals, and detailed remarks.
+4. **Efficient Administration**: Admins, specifically Chair and Assistant Chair, play a crucial role in managing the overall process. Chair admins can assign and withdraw reviewers, while assistant chair admins can allocate automatic track IDs for each project.
+5. **Seamless Integration**: BUHREC seamlessly integrates with existing school systems, ensuring a smooth transition into your current infrastructure.
 
 ## Actions
 ### Geberal user actions
