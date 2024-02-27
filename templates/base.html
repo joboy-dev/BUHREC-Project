@@ -76,9 +76,12 @@
     
     {% block body %} {% endblock %}
 
+    {% block footer %} 
     <footer>
         <p>&copy; {{ year }}</p>
     </footer>
+    {% endblock %}
+
 
     <script src="{% static 'js/base.js' %}"></script>
     
