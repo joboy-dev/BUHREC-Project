@@ -54,5 +54,28 @@ As an admin, two roles are involved:
 3. Create a `.env` file in the root directory of the project and add a `SECRET_KEY` variable:
     `SECRET_KEY = 'random characters'`
 
-#### OPTIONAL
-You can create a virtual environment before runningthe commands in number 2.
+### OPTIONAL
+You can create a virtual environment before running the commands in number 2.
+
+#### Creating the Virtual Environment
+- Open your terminal or command prompt.
+- Navigate to the directory where you want to create your virtual environment.
+- Execute the following command:
+    `python -m venv /path/to/new/virtual/environment`
+- Replace /path/to/new/virtual/environment with the desired location for your virtual environment. For example:
+    `python -m venv .venv`
+- This will create a virtual environment in the current directory.
+- On Windows, you can also use the following command:
+    `python -m venv c:\path\to\myenv`
+
+#### Activate the Virtual Environment
+After creating the virtual environment, activate it:
+- On Windows:
+    `.venv\Scripts\activate`
+
+- On macOS/Linux:
+    `source .venv/bin/activate`
+
+#### Deactivate the Virtual Environment
+When you’re done working in the virtual environment, deactivate it:
+    `deactivate`
