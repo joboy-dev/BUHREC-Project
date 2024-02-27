@@ -5,7 +5,6 @@ from django.views import View, generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
-import smtplib
 from uuid import uuid4
 from datetime import datetime
 
