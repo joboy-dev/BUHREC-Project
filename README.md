@@ -3,11 +3,11 @@ BUHREC is a user-friendly and comprehensive web application designed to simplify
 
 ## Technologies Used
 ### Frontend
-    - HTML
-    - CSS
-    - JavaScript
+- HTML
+- CSS
+- JavaScript
 ### Backend
-    - Django
+- Django
 
 ## Key Features
 1. **Versatile User Roles**: Choose from four distinct roles: Student, Researcher, Reviewer, and Admin. Each role comes with tailored functionalities to ensure a smooth workflow.
