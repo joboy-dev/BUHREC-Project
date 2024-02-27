@@ -7,8 +7,9 @@
     padding: var(--padding);
     height: 75%;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
+    gap: 40px;
 }
 
 .content .pic-container {
@@ -46,6 +47,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--blue-color);
+    margin: 10px 0;
 }
 
 .details h1 span {
@@ -69,9 +71,22 @@
     font-weight: 500;
 }
 
-a.btn, button.btn.update {
+.details .detail-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+button.btn.update {
     background-color: var(--gold-color);
     margin-bottom: 20px;
+    height: 40px;
+    width: 120px;
+    padding: 5px;
+}
+
+button.btn.password-update {
+    width: 200px;
 }
 
 
@@ -84,14 +99,26 @@ form.upload-form {
     gap: 20px;
 }
 
+input {
+    background-color: white;
+    height: 50px;
+    width: 40%;
+    box-shadow: var(--box-shadow);
+    padding: 10px 20px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-size: 0.6rem;
+    margin-bottom: 20px;
+}
+
+input:focus {
+    box-shadow: none;
+    border: 1px solid var(--gold-color);
+}
 
 input[type='file'] {
-    background-color: white;
-    height: 40px;
     width: 100%;
-    box-shadow: var(--box-shadow);
-    padding: 10px;
-    border-radius: 10px;
 }
 
 input[type='submit'] {
@@ -99,9 +126,10 @@ input[type='submit'] {
     border: none;
     color: var(--white-color);
     height: 40px;
-    width: 50%;
+    width: 20%;
     border-radius: 10px;
     box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.3);
+    padding: 0;
 }
 
 input[type='submit']:hover {
@@ -119,5 +147,9 @@ form.show {
 }
 
 form label {
+    display: none;
+}
+
+form .errorlist {
     display: none;
 }

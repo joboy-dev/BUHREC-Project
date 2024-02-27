@@ -235,11 +235,20 @@ class LoginView(View):
 class UserDetailsView(LoginRequiredMixin, View):
     '''View to get user details'''
     
+    login_url = 'user:login'
+    
     def get(self, request):
         user = request.user
         
         change_picture_form = forms.ChangeProfilePictureForm()
+        change_detail_form = forms.ChangeDetailsForm(instance=user)
+        change_email_form = forms.ChangeEmailForm(instance=user)
+        change_password_form = forms.ChangePasswordForm()
+        
         context['change_picture_form'] = change_picture_form
+        context['change_detail_form'] = change_detail_form
+        context['change_email_form'] = change_email_form
+        context['change_password_form'] = change_password_form
         
         if user.role == 'student' or user.role == 'researcher':
             context['student_researcher'] = StudentOrResearcher.objects.get(user=user)
@@ -254,12 +263,13 @@ class UserDetailsView(LoginRequiredMixin, View):
 class ChangeProfilePictureView(LoginRequiredMixin, View):
     '''View to update profile picture for a user'''
     
+    login_url = 'user:login'
+    
     def post(self, request):    
         change_picture_form = forms.ChangeProfilePictureForm(request.POST, request.FILES)
         
         if change_picture_form.is_valid():
             profile_pic = change_picture_form.cleaned_data['profile_pic']
-            print(f"PROFILE PIC ---- {profile_pic}")
 
             # Save changes
             request.user.profile_pic = profile_pic
@@ -279,8 +289,92 @@ class ChangeProfilePictureView(LoginRequiredMixin, View):
 
 class ChangeEmailView(LoginRequiredMixin, View):
     '''View to change a user's email'''
+    
+    login_url = 'user:login'
+    
+    def post(self, request):    
+        change_email_form = forms.ChangeEmailForm(request.POST)
         
+        if change_email_form.is_valid():
+            email = change_email_form.cleaned_data['email']
+
+            # Save changes
+            request.user.email = email
+            request.user.save()
+            
+            messages.success(request, 'Email updated successfully')
+            return redirect(reverse_lazy('user:profile'))
+            
         
+        context['change_email_form'] = change_email_form
+        for field, errors in change_email_form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, 'user/profile.html', context)
+    
+
+class ChangeDetailsView(LoginRequiredMixin, View):
+    '''View to change a user's first and last name details'''
+    
+    login_url = 'user:login'
+    
+    
+    def post(self, request):    
+        change_detail_form = forms.ChangeDetailsForm(request.POST)
+        
+        if change_detail_form.is_valid():
+            first_name = change_detail_form.cleaned_data['first_name']
+            last_name = change_detail_form.cleaned_data['last_name']
+
+            # Save changes
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.save()
+            
+            messages.success(request, 'Details updated successfully')
+            return redirect(reverse_lazy('user:profile'))
+            
+        context['change_detail_form'] = change_detail_form
+        for field, errors in change_detail_form.errors.items():
+            for error in errors:
+                messages.error(request, f'{field.capitalize()}: {error}')
+                
+        return render(request, 'user/profile.html', context)
+        
+
+class ChangePasswordView(LoginRequiredMixin, View):
+    '''View to change a user's email'''
+    
+    login_url = 'user:login'
+    
+    def post(self, request):    
+        change_password_form = forms.ChangePasswordForm(request.POST)
+        
+        if change_password_form.is_valid():
+            old_password = change_password_form.cleaned_data['old_password']
+            new_password = change_password_form.cleaned_data['new_password']
+            
+            # Check if user credentials match
+            user = authenticate(request, email=request.user.email, password=old_password) 
+            if user is None:
+                messages.error(request, 'Invalid credentials. Check your old password.')
+                return render(request, 'user/profile.html', context)
+
+            # Save changes
+            user.set_password(new_password)
+            user.save()
+            
+            messages.success(request, 'Password updated successfully. Please login again with your new password for changes to take full effect.')
+            return redirect(reverse_lazy('user:profile'))
+            
+        
+        context['change_password_form'] = change_password_form
+        for field, errors in change_password_form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
+        return render(request, 'user/profile.html', context)
 
 def logout_view(request):
     '''View to logout a user'''

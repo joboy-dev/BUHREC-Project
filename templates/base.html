@@ -53,6 +53,7 @@
 
                         <div class="detail">
                             <h2 class="name">{{ user.last_name }}, {{ user.first_name}}</h2>
+                            <!-- <p><span>{{ user.email.truncwords }}...</span></p> -->
                             <p>Role: <span>{{ user.role.capitalize }}</span></p>
                         </div>
                     </div>
@@ -60,9 +61,7 @@
                     <div class="hr"></div>
 
                     <div class="account-actions">
-                        <a href="{% url 'user:profile' %}">View Profile</a>
-                        <a href="">Edit profile</a>
-                        <a href="">Change password</a>
+                        <a href="{% url 'user:profile' %}">My Profile & Settings</a>
                         <a href="{% url 'user:logout' %}" style="color: rgba(238, 107, 107);">Logout</a>
                     </div>
 

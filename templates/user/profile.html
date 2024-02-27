@@ -17,18 +17,39 @@
             <div class="img-container">
                 <img src="{{ user.profile_pic.url }}" alt="profile-pic">
             </div>
-            <button class="btn update show">Update</button>
+            <button class="btn update pic-update show">Update</button>
             <form action="{% url 'user:change-profile-picture' %}" method="post" enctype="multipart/form-data" class="upload-form hide">
                 {% csrf_token %}
                 {{ change_picture_form }}
-                <!-- <input type="file" name="profile-pic"> -->
                 <input type="submit" value="Save">
             </form>
         </div>
 
         <div class="details">
-            <h1>{{ user.last_name}}, <span>{{ user.first_name }}</span></h1>
-            <p class="email">{{ user.email }}</p>
+            <div class="detail-container">
+                <h1>{{ user.last_name}}, <span>{{ user.first_name }}</span></h1>
+                <button class="btn update detail-update show">Change</button>
+            </div>
+            <form action="{% url 'user:change-detail' %}" method="post" class="detail-form hide">
+                {% csrf_token %}
+                {{ change_detail_form }}
+                <input type="submit" value="Save">
+            </form>
+
+            <!-- ----------------------------------------------------- -->
+            <!-- ----------------------------------------------------- -->
+
+            <div class="detail-container">
+                <p class="email">{{ user.email }}</p>
+                <button class="btn update email-update show">Change</button>
+            </div>
+
+            <form action="{% url 'user:change-email' %}" method="post" class="email-form hide">
+                {% csrf_token %}
+                {{ change_email_form }}
+                <input type="submit" value="Save">
+            </form>
+
             <p class="other">Role: <span>{{ user.role.capitalize }}</span></p>
             <div class="hr"></div>
             
@@ -54,10 +75,20 @@
             <p class="other">Role: <span>{{ admin.role.capitalize }} admin</span></p>
 
             {% endif %}
+            <div class="hr"></div>
+
+            <h1>Password Settings</h1>
+
+            <button class="btn update password-update show">Change Password</button>
+            <form action="{% url 'user:change-password' %}" method="post" class="password-form hide">
+                {% csrf_token %}
+                {{ change_password_form }}
+                <input type="submit" value="Save">
+            </form>
         </div>
 
     </div>
 
 </section>
-<script src="{% static 'js/form.js' %}"></script>
+<script src="{% static 'js/forms.js' %}"></script>
 {% endblock %}

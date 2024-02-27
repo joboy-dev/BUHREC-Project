@@ -24,10 +24,10 @@ def is_valid_password(password):
         return False
     
 # For reusablility
-def form_text_field(field, widget, placeholder):
+def form_text_field(field, widget, placeholder, readonly=False):
     '''Form text field '''
     
-    return field(max_length=200, required=True, widget=widget(attrs={'placeholder': placeholder}))
+    return field(max_length=200, required=True, widget=widget(attrs={'placeholder': placeholder, 'readonly': readonly}))
 
 def form_select_field(choices):
     '''Form select field '''
@@ -155,11 +155,25 @@ class ChangeProfilePictureForm(forms.ModelForm):
         model = User
         fields = ['profile_pic']
         
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        profile_pic = cleaned_data.get('profile_pic')
+        
+        if not profile_pic:
+            raise forms.ValidationError('Select a picture')
+        
+        return cleaned_data
+        
 
-class ChangeEmailForm(forms.Form):
+class ChangeEmailForm(forms.ModelForm):
     '''Form to change email'''
     
     email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
+    
+    class Meta:
+        model = User
+        fields = ['email']
         
     def clean(self):
         cleaned_data = super().clean()  # Call parent's clean method first
@@ -173,31 +187,35 @@ class ChangeEmailForm(forms.Form):
         return cleaned_data
         
 
-class ChangeDetailsForm(forms.Form):
+class ChangeDetailsForm(forms.ModelForm):
     '''Form to change user details'''
     
     first_name = form_text_field(forms.CharField, forms.TextInput, 'First name')
     last_name = form_text_field(forms.CharField, forms.TextInput, 'Last name')
+    
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
         
 
 class ChangePasswordForm(forms.Form):
     '''Form to change profile picture'''
     
-    email = form_text_field(forms.EmailField, forms.EmailInput, 'Email')
-    password = form_text_field(forms.CharField, forms.PasswordInput, 'Password')
+    old_password = form_text_field(forms.CharField, forms.PasswordInput, 'Old Password')
+    new_password = form_text_field(forms.CharField, forms.PasswordInput, 'New Password')
     confirm_password = form_text_field(forms.CharField, forms.PasswordInput, 'Confirm Password')
     
     def clean(self):
         cleaned_data = super().clean()  # Call parent's clean method first
 
-        password = cleaned_data.get('password')
+        new_password = cleaned_data.get('new_password')
         password2 = cleaned_data.get('confirm_password')
         
         # Password checks
-        if password != password2:
+        if new_password != password2:
             raise forms.ValidationError('Passwords do not match!')
 
-        if not is_valid_password(password):
+        if not is_valid_password(new_password) or not is_valid_password(password2):
             raise forms.ValidationError('Password should have uppercase, lowercase, special character and should have at least 8 characters')
         
         return cleaned_data
