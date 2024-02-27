@@ -1,8 +1,23 @@
-# BUHREC
-This is a school project management application built with Django that makes creation and management of school projects easy for all parties involved like the students, project reviewers, and school admins. The application is easily integrated into school systems as well.
+# BUHREC: Streamlining School Project Management
+BUHREC is a user-friendly and comprehensive web application designed to simplify the creation, management, and review of school projects. It empowers students, researchers, reviewers, and administrators to collaborate effectively throughout the project lifecycle.
 
-## Features
-### User
+## Technologies Used
+### Frontend
+    - HTML
+    - CSS
+    - JavaScript
+### Backend
+    - Django
+
+## Key Features
+1. *Versatile User Roles*: Choose from four distinct roles: Student, Researcher, Reviewer, and Admin. Each role comes with tailored functionalities to ensure a smooth workflow.
+2. *Streamlined Project Management*: Students and researchers can effortlessly create, edit, and delete their projects, gaining full control over their project journey.
+3. *Comprehensive Review Process*: Reviewers can thoroughly examine assigned projects, providing valuable feedback through approvals, disapprovals, and detailed remarks.
+4. *Efficient Administration*: Admins, specifically Chair and Assistant Chair, play a crucial role in managing the overall process. Chair admins can assign and withdraw reviewers, while assistant chair admins can allocate automatic track IDs for each project.
+5. *Seamless Integration*: BUHREC seamlessly integrates with existing school systems, ensuring a smooth transition into your current infrastructure.
+
+## Actions
+### Geberal user actions
 - Creating account where they can select one of four roles which are Student, Researcher, Reviewer, and Admin
 - Setting up profile based on the role selected.
 - Login
