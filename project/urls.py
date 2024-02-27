@@ -5,6 +5,7 @@ app_name = 'project'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('about/', views.AboutView.as_view(), name='about'),
+    path('send-message', views.ProcessContactFormView.as_view(), name='send-message'),
     path('projects/', views.ProjectsView.as_view(), name='projects'),
     path('projects/create/', views.CreateProjectView.as_view(), name='create-project'),
     path('project/<uuid:id>/', views.GetProjectDetail.as_view(), name='detail'),

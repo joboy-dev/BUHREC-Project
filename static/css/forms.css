@@ -125,6 +125,20 @@ form input[type='submit']:hover {
     box-shadow: none;
 }
 
+form p {
+    font-size: 0.6rem;
+    color: var(--blue-color);
+}
+
+form p a {
+    text-decoration: none;
+    color: var(--gold-color);
+}
+
+form p a:hover {
+    font-weight: 500;
+}
+
 /* CK EDITOR */
 #ckform {
     width: 100%;

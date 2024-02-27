@@ -6,6 +6,7 @@ import re
 
 from project.models import Reviewer
 from user.countries import get_all_countries
+from user.reusable_form_field import form_text_field, form_select_field
 
 from .models import StudentOrResearcher, Admin
 
@@ -22,17 +23,6 @@ def is_valid_password(password):
         return True
     else:
         return False
-    
-# For reusablility
-def form_text_field(field, widget, placeholder, readonly=False):
-    '''Form text field '''
-    
-    return field(max_length=200, required=True, widget=widget(attrs={'placeholder': placeholder, 'readonly': readonly}))
-
-def form_select_field(choices):
-    '''Form select field '''
-    
-    return forms.CharField(max_length=200, required=True, widget=forms.Select(choices=choices))
 
 
 ############################################################################
@@ -219,5 +209,3 @@ class ChangePasswordForm(forms.Form):
             raise forms.ValidationError('Password should have uppercase, lowercase, special character and should have at least 8 characters')
         
         return cleaned_data
-    
-    

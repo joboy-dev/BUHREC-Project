@@ -32,6 +32,11 @@
 .hero-content h1 {
     font-size: 1.2rem;
     color: var(--blue-color);
+    font-weight: 900;
+}
+
+.hero-content h1 span {
+    color: var(--gold-color);
 }
 
 .hero-content p {
@@ -44,7 +49,47 @@
 
 /* CONTACT */
 #contact {
-    height: 50vh;
+    height: 60dvh;
     width: 100%;
     background-color: var(--light-gold-color);
+    padding: var(--padding);
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 40px;
+
+}
+
+.details {
+    width: 40%;
+}
+
+#contact .details h1 {
+    font-size: 1.5rem;;
+    margin: 20px 0;
+}
+
+#contact .details p {
+    font-size: 0.8rem;
+    color: var(--blue-color);
+    line-height: 30px;
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+#contact .details p span {
+    color: var(--gold-color);
+}
+
+#contact form {
+    width: 40%;
+    height: 100%;
+    justify-content: start;
+    padding-top: 40px;
+}
+
+#contact form textarea {
+    height: 200px;
+    width: 30dvw;
+    padding: 20px;
 }

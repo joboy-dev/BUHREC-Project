@@ -5,11 +5,13 @@ from django.views import View, generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
+import smtplib
 from uuid import uuid4
 from datetime import datetime
 
 from project.models import Project, Reviewer, Assignment, Remark
 from project.permissions import IsProjectOwner
+from project.util import Util
 from user.models import Admin, StudentOrResearcher
 from user.permissions import IsAdmin, IsAsstChairAdmin, IsChairAdmin, IsReviewer, IsStudentOrResearcher
 from . import forms
@@ -25,7 +27,30 @@ class HomeView(View):
     '''Home View'''
     
     def get(self, request):
+        contatc_form = forms.ContactForm()
+        context['contact_form'] =  contatc_form
         context['active_link'] = 'home'
+        return render(request, 'index.html', context)
+    
+
+class ProcessContactFormView(View):
+    '''View to process contact form'''
+    
+    def post(self, request):
+        contact_form = forms.ContactForm(request.POST)
+        
+        if contact_form.is_valid():
+            # Send mail
+            Util.send_email(contact_form.cleaned_data)
+            
+            messages.success(request, 'Message sent successfully. Check your email for a confirmation message.')
+            return redirect(reverse_lazy('project:home'))
+        
+        context['contact_form'] = forms.ContactForm()
+        for field, errors in contact_form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+                
         return render(request, 'index.html', context)
 
 

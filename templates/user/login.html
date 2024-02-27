@@ -17,6 +17,7 @@
         <h1><span>Log</span> In</h1>
         {{form}}
         <input type="submit" class="btn" value="Login">
+        <p>Don't have an account? <a href="{% url 'user:signup' %}">Sign up</a></p>
     </form>
 </section>
 {% endblock %}

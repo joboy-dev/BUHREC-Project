@@ -1,5 +1,7 @@
 from django import forms
 
+from user.reusable_form_field import form_text_field
+
 from .models import Project, Remark
 
 class CreateProjectForm(forms.ModelForm):
@@ -10,8 +12,7 @@ class CreateProjectForm(forms.ModelForm):
         self.fields["hypothesis"].required = False
         
     
-    title = forms.CharField(max_length=25, required=True, widget=forms.TextInput(attrs={'placeholder': 'Project title', 'class': 'input-field'}))
-    
+    title = form_text_field(forms.CharField, forms.TextInput, 'Project title', max_length=25)
     
     class Meta:
         model = Project
@@ -37,20 +38,22 @@ class EditProjectForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["hypothesis"].required = False
         
-    title = forms.CharField(max_length=25, required=True, widget=forms.TextInput(attrs={'placeholder': 'Project title', 'class': 'input-field'}))
-        
+    title = form_text_field(forms.CharField, forms.TextInput, 'Project title', max_length=25)
+
     class Meta:
         model = Project
         fields = '__all__'
         exclude = ['id', 'approved', 'owner', 'payment_approved', 'track_id']
 
 
+###############################################################################
+###############################################################################
+###############################################################################
+
 # REMARK
 
 class AddRemarkForm(forms.ModelForm):
     '''Form to add remark '''
-    
-    # message = forms.CharField(max_length=25, required=True, widget=forms.Textarea(attrs={'class': 'textarea-field'}))
     
     class Meta:
         model = Remark
@@ -59,12 +62,24 @@ class AddRemarkForm(forms.ModelForm):
         
 
 class EditRemarkForm(forms.ModelForm):
-    '''Form to add remark '''
-    
-    # message = forms.CharField(max_length=25, required=True, widget=forms.Textarea(attrs={'class': 'textarea-field'}))
+    '''Form to edit remark '''
     
     class Meta:
         model = Remark
         fields = '__all__'
         exclude = ['id', 'project', 'reviewer']
     
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+# CONTACT
+
+class ContactForm(forms.Form):
+    '''Contact form'''
+    
+    name = form_text_field(forms.CharField, forms.TextInput, 'Full name')
+    email = form_text_field(forms.CharField, forms.TextInput, 'Email')
+    message = form_text_field(forms.CharField, forms.Textarea, 'Message')

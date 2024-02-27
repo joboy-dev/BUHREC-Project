@@ -4,6 +4,7 @@
 {% block page_title %} Home {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
 {% block body %} 
@@ -19,6 +20,8 @@
             <a href="{% url 'project:create-project' %}" class="btn">Create a project</a>
             {% elif user.role == 'reviewer' %}
             <a href="{% url 'project:assignments' %}" class="btn">View assignments</a>
+            {% else %}
+            <a href="{% url 'project:admin-dashboard' %}" class="btn">Visit dashboard</a>
             {% endif %}
         {% endif %}
     </div>
@@ -28,7 +31,19 @@
     </div>
 </section>
 
-<!-- <section id="contact">
+<section id="contact">
+    <div class="details">
+        <h1>Contact Us</h1>
+        <p>Reach out to us for help through any of the following means</p>
+        <p>Phone: <span>09054033165</span></p>
+        <p>Email: <span>buhrec@gmail.com</span></p>
+    </div>
 
-</section> -->
+    <form action="{% url 'project:send-message' %}" method="post">
+        {% csrf_token %}
+        {{ contact_form }}
+        <input type="submit" value="Send message">
+    </form>
+
+</section>
 {% endblock %}

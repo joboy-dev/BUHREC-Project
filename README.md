@@ -53,6 +53,7 @@ As an admin, two roles are involved:
     - `python3 manage.py runserver` to start up the develeopment server
 3. Create a `.env` file in the root directory of the project and add a `SECRET_KEY` variable:
     `SECRET_KEY = 'random characters'`
+4. Create a `media` folder in the root directory of the project as well.
 
 ### OPTIONAL
 You can create a virtual environment before running the commands in number 2.
