@@ -6,6 +6,7 @@
     justify-content: space-between;
     padding-right: 120px;
     font-family: 'Poppins', 'Open Sans', sans-serif;
+    overflow: hidden;
 }
 
 #form .image {

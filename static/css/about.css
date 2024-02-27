@@ -1,10 +1,53 @@
 #about-section {
     height: 100vh;
     width: 100%;
+    overflow: hidden;
 }
 
 .content {
     height: 70%;
     width: 100%;
     padding: var(--padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.content .img-container {
+    width: 45%;
+    height: 70%;
+}
+
+.img-container img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    mix-blend-mode: multiply;
+    /* animation: scaleUpDown 2s infinite; */
+}
+
+.content .about {
+    width: 55%;
+    height: 100%;
+    padding: 35px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.about h1 {
+    color: var(--blue-color);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.about h1 span {
+    color: var(--gold-color);
+    font-weight: 500;
+}
+
+.about p {
+    font-size: 0.7rem;
+    color: var(--blue-color);
 }
