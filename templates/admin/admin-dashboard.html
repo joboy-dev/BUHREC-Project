@@ -8,7 +8,9 @@
 
 {% block body %} 
 <section id="admin-dashboard">
-    <h1>Dashboard</h1>
+    <div class="breadcrumb">
+        <h1>Dashboard</h1>
+    </div>
     <form action="{% url 'project:search-project' %}" method="post" class="search-form">
         {% csrf_token %}
         <input type="text" placeholder="Search projects" name="search" required>

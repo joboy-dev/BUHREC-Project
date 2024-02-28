@@ -15,6 +15,7 @@
     padding: 0 120px;
     border-radius: 40px;
     overflow: hidden;
+    animation: fadeSlide 1s linear;
 }
 
 .image img {
@@ -32,6 +33,7 @@ form {
     align-items: start;
     justify-content: center;
     gap: 20px;
+    animation: fadeSlideLeft 1s linear;
 }
 
 h1 {

@@ -21,6 +21,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    animation: fadeSlide 1s linear;
 }
 
 .content .img-container {
@@ -39,6 +40,7 @@
 
 .content .details {
     width: 60%;
+    animation: fadeSlideLeft 1s linear;
 }
 
 .details h1:first-child {

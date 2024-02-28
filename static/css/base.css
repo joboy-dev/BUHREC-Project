@@ -32,6 +32,18 @@
     }
 }
 
+@keyframes fadeSlideLeft {
+    from {
+        translate: 20px 0;
+        opacity: 0;
+    }
+
+    to {
+        translate: 0;
+        opacity: 1;
+    }
+}
+
 @keyframes fadeDown {
     from {
         translate: 0 -20px;
@@ -216,8 +228,7 @@ nav a.active {
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
-    width: 4px;
-    margin: 0 10px;
+    width: 0;
 }
 
 ::-webkit-scrollbar-track {
@@ -225,7 +236,7 @@ nav a.active {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--blue-color);
+    background-color: var(--white-color);
 }
 
 a.btn, button.btn {

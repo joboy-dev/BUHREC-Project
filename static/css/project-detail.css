@@ -17,6 +17,7 @@
     width: 65%;
     overflow-y: scroll;
     padding: 0 20px;
+    animation: fadeSlide 1s linear;
 }
 
 .project .metadata-container {
@@ -29,6 +30,7 @@
     gap: 20px;
     overflow-y: scroll;
     padding: 0 10px;
+    animation: fadeSlideLeft 1s linear;
 }
 
 .metadata-container .metadata {

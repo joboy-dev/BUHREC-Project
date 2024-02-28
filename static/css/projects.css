@@ -74,7 +74,7 @@ h1 span {
 /* ASSIGNMENTS */
 
 .assignments {
-    height: 90%;
+    height: 75%;
     width: 100%;
     display: flex;
     align-items: start;
@@ -84,6 +84,11 @@ h1 span {
 .assignments .projects {
     height: 100%;
     width: 50%;
+    animation: fadeSlideLeft 1s linear;
+}
+
+.assignments .projects:first-child {
+    animation: fadeSlide 1s linear;
 }
 
 .projects h1 {

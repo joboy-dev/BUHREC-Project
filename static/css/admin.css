@@ -3,6 +3,10 @@ section#admin-dashbaord {
     width: 100%;
 }
 
+.breadcrumb {
+    height: 200px;
+}
+
 h1 {
     font-size: 1rem;
     color: var(--gold-color);
@@ -27,6 +31,7 @@ form.search-form input[type='text'] {
     box-shadow: 1px 2px 4px rgb(0, 0, 0, 0.3);
     font-size: 0.6rem;
     color: var(--blue-color);
+    animation: fadeSlide 1s linear;
 }
 
 form.search-form input:focus {
@@ -43,6 +48,7 @@ form input[type='submit'] {
     border-radius: 10px;
     font-size: 0.6rem;
     box-shadow: var(--box-shadow);
+    animation: fadeSlideLeft 1s linear;
 }
 
 form input[type='submit']:hover {
@@ -78,7 +84,6 @@ tr.table-head th {
     text-align: left;
     color: var(--blue-color);
     animation: fadeDown 1s linear;
-
 }
 
 tr td {
@@ -158,6 +163,11 @@ form.assign-form {
 .asst-chair .projects-container {
     height: 90%;
     width: 100%;
+    animation: fadeSlideLeft 1s linear;
+}
+
+.asst-chair .projects-container:first-child {
+    animation: fadeSlide 1s linear;
 }
 
 .container h1 {
