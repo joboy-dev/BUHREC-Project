@@ -17,7 +17,7 @@ BUHREC is a user-friendly and comprehensive web application designed to simplify
 5. **Seamless Integration**: BUHREC seamlessly integrates with existing school systems, ensuring a smooth transition into your current infrastructure.
 
 ## Actions
-### Geberal user actions
+### General user actions
 - Creating account where they can select one of four roles which are Student, Researcher, Reviewer, and Admin
 - Setting up profile based on the role selected.
 - Login
@@ -57,14 +57,14 @@ As an admin, two roles are involved:
     - `pip install -r requirements.txt` to get the necessary dependencies
     - `py manage.py makemigrations` to have a database file
     - `py manage.py migrate`
-    - `py manage.py collectstatic` which is essential for the ck5editor used in the project
+    - `py manage.py collectstatic` which is essential for the ckeditor5 used in the project for creating and editing a project.
     - `py manage.py runserver` to start up the develeopment server
 
-    #### Mac
+    #### macOS/Linux
     - `pip install -r requirements.txt` to get the necessary dependencies
     - `python3 manage.py makemigrations` to have a database file
     - `python3 manage.py migrate`
-    - `python3 manage.py collectstatic` which is essential for the ck5editor used in the project
+    - `python3 manage.py collectstatic` which is essential for the ckeditor5 used in the project for creating and editing a project.
     - `python3 manage.py runserver` to start up the develeopment server
 3. Create a `.env` file in the root directory of the project and add a `SECRET_KEY` variable:
     `SECRET_KEY = 'random characters'`
@@ -83,6 +83,8 @@ You can create a virtual environment before running the commands in number 2.
 - This will create a virtual environment in the current directory.
 - On Windows, you can also use the following command:
     `python -m venv c:\path\to\myenv`
+
+Just do `python-m venv venv` to put the virtual environment in the project root directory
 
 #### Activate the Virtual Environment
 After creating the virtual environment, activate it:

@@ -10,5 +10,5 @@ from django.core.files.storage import FileSystemStorage
 class CustomStorage(FileSystemStorage):
     """Custom storage for django_ckeditor_5 images."""
 
-    location = os.path.join(settings.MEDIA_ROOT, "ckuploads/images/")
-    base_url = urljoin(settings.MEDIA_URL, "ckuploads/images/")
+    location = os.path.join(settings.MEDIA_ROOT, "ckeditor5/images/")
+    base_url = urljoin(settings.MEDIA_URL, "ckeditor5/images/")
