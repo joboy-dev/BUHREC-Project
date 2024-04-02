@@ -11,6 +11,7 @@ urlpatterns = [
     path('project/<uuid:id>/', views.GetProjectDetail.as_view(), name='detail'),
     path('project/<uuid:id>/edit/', views.EditProjectView.as_view(), name='edit-project'),
     path('project/<uuid:id>/delete/', views.DeleteProjectView.as_view(), name='delete-project'),
+    path('project/<uuid:id>/payment/', views.ProcessPaymentView.as_view(), name='pay-for-project'),
     
     # REVIEWER
     path('assignments/', views.AssignmentsView.as_view(), name='assignments'),
@@ -22,5 +23,5 @@ urlpatterns = [
     path('assignment/<uuid:id>/assign-reviewer/', views.GiveAssignmentView.as_view(), name='assign-reviewer'),
     path('assignment/<uuid:id>/withdraw/', views.WithdrawAssignmentView.as_view(), name='withdraw-assignment'),
     
-    path('project/search/', views.SearchProjectsView.as_view(), name='search-project'),
+    path('project/search/<uuid:id>', views.SearchProjectsView.as_view(), name='search-project'),
 ]

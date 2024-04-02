@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--padding);
+    margin-top: 100px;
 }
 
 h1 {

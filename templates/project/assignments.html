@@ -23,6 +23,22 @@
                     <p>Created: <span>{{ assignment.project.created_at }}</span></p>
                     <p>Last updated: <span>{{ assignment.project.updated_at }}</span></p>
                     <p>Author: <span>{{ assignment.project.owner.user.last_name }}, {{ assignment.project.owner.user.first_name }}</span></p>
+                    <p>
+                        Tracking ID: 
+                        {% if assignment.project.track_id %}
+                        <span>{{assignment.project.track_id}}</span>
+                        {% else %}
+                        <span>No track id assigned yet. Please wait...</span>
+                        {% endif %}
+                    </p>
+                    <p>
+                        Payment Status: 
+                        {% if assignment.project.payment_approved %}
+                        <span style="color: rgba(47, 168, 108);">Paid</span>
+                        {% else %}
+                        <span style="color: rgba(238, 107, 107);">Unpaid</span>
+                        {% endif %}
+                    </p>
                     <p>Approved: <span style="color: rgba(238, 107, 107);">No</span></p>
                 </div>
 
@@ -47,6 +63,22 @@
                     <p>Created: <span>{{ completed.project.created_at }}</span></p>
                     <p>Last updated: <span>{{ completed.project.updated_at }}</span></p>
                     <p>Author: <span>{{ completed.project.owner.user.last_name }}, {{ completed.project.owner.user.first_name }}</span></p>
+                    <p>
+                        Tracking ID: 
+                        {% if completed.project.track_id %}
+                        <span>{{completed.project.track_id}}</span>
+                        {% else %}
+                        <span>No track id assigned yet. Please wait...</span>
+                        {% endif %}
+                    </p>
+                    <p>
+                        Payment Status: 
+                        {% if assignment.project.payment_approved %}
+                        <span style="color: rgba(47, 168, 108);">Paid</span>
+                        {% else %}
+                        <span style="color: rgba(238, 107, 107);">Unpaid</span>
+                        {% endif %}
+                    </p>
                     <p>Approved: <span style="color: rgba(47, 168, 108);">Yes</span></p>
                 </div>
                 <form action="{% url 'project:toggle-approval' completed.project.id %}" method="post">

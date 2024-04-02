@@ -1,3 +1,5 @@
+from datetime import datetime
+import re
 from django import forms
 
 from user.reusable_form_field import form_text_field
@@ -50,6 +52,46 @@ class EditProjectForm(forms.ModelForm):
 ###############################################################################
 ###############################################################################
 
+# PAYMENT
+
+class ProcessPaymentForm(forms.Form):
+    '''Form to pay for a project'''
+    
+    card_number = form_text_field(forms.CharField, widget=forms.TextInput, placeholder='Card number', max_length=25)
+    expiry_date = form_text_field(forms.CharField, widget=forms.TextInput, placeholder='Card expiry date e.g. 02/24', max_length=5)
+    cvv = form_text_field(forms.CharField, widget=forms.NumberInput, placeholder='CVV e.g. 123', max_length=3)
+    
+    def clean(self):
+        cleaned_data =  super().clean()
+        
+        current_date = datetime.now()
+        current_month = current_date.month
+        # Get the last two digits of the current year
+        current_year = current_date.year % 100
+        
+        
+        if not re.match(r"^(0[1-9]|1[0-2])\/(2[0-9])$", cleaned_data.get('expiry_date')):
+            raise forms.ValidationError('Enter a valid expiry date. It must be in this pattern 02/24 or 11/24')
+        else:
+            user_entered_date = cleaned_data.get('expiry_date')
+            # Convert user entered date to a list
+            user_date_list = user_entered_date.split('/')
+            
+            # Check if date is in the past
+            if int(user_date_list[1]) < current_year:
+                raise forms.ValidationError('Date cannot be in the past')
+            elif (int(user_date_list[1]) == current_year) and (int(user_date_list[0]) < current_month):
+                raise forms.ValidationError('Date cannot be in the past')
+        
+        if not re.match(r"^\d+$", cleaned_data.get('card_number')):
+            raise forms.ValidationError('Enter a valid card number')
+            
+        return cleaned_data
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 # REMARK
 
 class AddRemarkForm(forms.ModelForm):
@@ -83,3 +125,5 @@ class ContactForm(forms.Form):
     name = form_text_field(forms.CharField, forms.TextInput, 'Full name')
     email = form_text_field(forms.CharField, forms.TextInput, 'Email')
     message = form_text_field(forms.CharField, forms.Textarea, 'Message')
+    
+    

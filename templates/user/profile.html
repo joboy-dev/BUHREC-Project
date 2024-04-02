@@ -15,7 +15,7 @@
     <div class="content">
         <div class="pic-container">
             <div class="img-container">
-                <img src="{{ user.profile_pic.url }}" alt="profile-pic">
+                <img src="{{ user.profile_pic.url }}" alt="profile-pic" loading="lazy"> 
             </div>
             <button class="btn update pic-update show">Update</button>
             <form action="{% url 'user:change-profile-picture' %}" method="post" enctype="multipart/form-data" class="upload-form hide">

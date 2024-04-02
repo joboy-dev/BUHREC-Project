@@ -18,7 +18,11 @@
         {% for project in projects %}
         <div class="project">
             <div class="content">
-                <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
+                {% if project.payment_approved %}
+                    <a href="{% url 'project:detail' project.id %}">{{ project.title }}</a>
+                {% else %}
+                    <a href="{% url 'project:pay-for-project' project.id %}">{{ project.title }}</a>
+                {% endif %}
                 <p>Created: <span>{{ project.created_at }}</span></p>
                 <p>
                     Approved: 
@@ -28,8 +32,27 @@
                     <span style="color: rgba(238, 107, 107);">No</span>
                     {% endif %}
                 </p>
+                <p>
+                    Tracking ID: 
+                    {% if project.track_id %}
+                    <span>{{project.track_id}}</span>
+                    {% else %}
+                    <span>No track id assigned yet. Please wait...</span>
+                    {% endif %}
+                </p>
+                <p>
+                    Payment Status: 
+                    {% if project.payment_approved %}
+                    <span style="color: rgba(47, 168, 108);">Paid</span>
+                    {% else %}
+                    <span style="color: rgba(238, 107, 107);">Unpaid</span>
+                    {% endif %}
+                </p>
+
             </div>
+            {% if project.payment_approved %}
             <a href="{% url 'project:edit-project' project.id %}" class="btn">Edit</a>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

@@ -83,7 +83,7 @@
                         {{ project_reviewer.user.last_name }}, {{ project_reviewer.user.first_name }}
                         {% endif %}
                     </span>
-                    </p>
+                </p>
                 {% endif %}
                 <p>
                     Approved: 
@@ -91,6 +91,22 @@
                     <span style="color: rgba(47, 168, 108);">Yes</span>
                     {% else %}
                     <span style="color: rgba(238, 107, 107);">No</span>
+                    {% endif %}
+                </p>
+                <p>
+                    Tracking ID: 
+                    {% if project.track_id %}
+                    <span>{{project.track_id}}</span>
+                    {% else %}
+                    <span>No track id assigned yet. Please wait...</span>
+                    {% endif %}
+                </p>
+                <p>
+                    Payment Status: 
+                    {% if project.payment_approvex %}
+                    <span style="color: rgba(47, 168, 108);">Paid</span>
+                    {% else %}
+                    <span style="color: rgba(238, 107, 107);">Unpaid</span>
                     {% endif %}
                 </p>
             </div>

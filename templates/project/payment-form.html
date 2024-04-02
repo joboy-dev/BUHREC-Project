@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block page_title %} Set Admin Profile {% endblock %}
+{% block page_title %} Payment {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
@@ -9,15 +9,14 @@
 {% block body %} 
 <section id="form">
     <div class="image">
-        <img src="{% static 'images/set-profile.jpg' %}" alt="signup-img" loading="lazy">
+        <img src="{% static 'images/payment.jpg' %}" alt="payment-img" loading="lazy">
     </div>
 
-    <form action="#" method="post">
+    <form action="" method="post">
         {% csrf_token %}
-        <h1><span>Set Up</span> Admin Profile</h1>
+        <h1><span>Pay</span> For Project</h1>
         {{form}}
-        <input type="submit" class="btn" value="Save">
+        <input type="submit" class="btn" value="Pay">
     </form>
-
 </section>
 {% endblock %}

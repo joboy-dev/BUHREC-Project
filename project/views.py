@@ -1,11 +1,13 @@
+from django.http import HttpRequest
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View, generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 
-from uuid import uuid4
+from uuid import uuid4, UUID
 from datetime import datetime
 
 from project.models import Project, Reviewer, Assignment, Remark
@@ -104,8 +106,7 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
     model = Project
     template_name = 'project/create-project.html'
     form_class = forms.CreateProjectForm
-    success_message = 'Project created successfully'
-    success_url = reverse_lazy('project:projects')
+    success_message = 'Proceed to payment'
     
     permission_required = 'user.is_student_or_researcher'
     permission_denied_message = 'Access denied as you are not a student or researcher'
@@ -137,7 +138,7 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
             Assignment.objects.create(project=project)
 
             messages.success(request, f'{self.success_message}')
-            return redirect(self.success_url)
+            return redirect(reverse('project:pay-for-project', kwargs={'id': project.id}))
         
         context['form'] = form
         for field, errors in form.errors.items():
@@ -146,6 +147,54 @@ class CreateProjectView(LoginRequiredMixin, generic.CreateView):
         
         return render(request, self.template_name, context)
     
+
+class ProcessPaymentView(LoginRequiredMixin, View):
+    '''View to process user payment for a project'''
+    
+    login_url = 'user:login'
+    
+    form_class = forms.ProcessPaymentForm
+    template_name = 'project/payment-form.html'
+    
+    success_message = 'Project created successfully'
+    success_url = reverse_lazy('project:projects')
+    
+    permission_required = 'user.is_student_or_researcher'
+    permission_denied_message = 'Access denied as you are not a student or researcher'
+    
+    def dispatch(self, request, id):
+        user = request.user
+        
+        if not IsStudentOrResearcher.has_permission(request, user):
+            messages.error(request, f'{self.permission_denied_message}')
+            return redirect(reverse_lazy('project:home'))
+            
+        return super().dispatch(request)
+    
+    def get(self, request):
+        context['active_link'] = 'projects'
+        context['form'] = self.form_class()
+        return render(request, self.template_name, context)
+    
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            project = get_object_or_404(Project, id=self.kwargs['id'])
+            project.payment_approved = True
+            project.save()
+            
+            messages.success(request, 'Project payment process complete. You now have full access to your project.')
+            
+            return redirect(self.success_url)
+            
+        context['form'] = form
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f'{error}')
+        
+        return render(request, self.template_name, context)
 
 class GetProjectDetail(LoginRequiredMixin, View):
     '''View to get details about a particular project'''
@@ -226,10 +275,17 @@ class EditProjectView(LoginRequiredMixin, generic.UpdateView):
     permission_denied_message = 'You do not have access to this project'
     
     def dispatch(self, request, id):
+        project = get_object_or_404(Project, id=id)
+        
         # check permission
-        if not IsProjectOwner.has_permission(request, get_object_or_404(Project, id=id)):
+        if not IsProjectOwner.has_permission(request, project):
             messages.error(request, f'{self.permission_denied_message}')
             return redirect(reverse_lazy('project:home'))
+        
+        if not project.payment_approved:
+            messages.error(request, 'You have not paid for this project')
+            return redirect(reverse('project:pay-for-project', kwargs={'id': project.id}))
+        
         return super().dispatch(request, id)
     
     def get(self, request, id):
@@ -266,11 +322,16 @@ class DeleteProjectView(LoginRequiredMixin, generic.DeleteView):
     
     def post(self, request, id):
         user = request.user
+        project = get_object_or_404(Project, id=id)
         
         # check permission
-        if not IsProjectOwner.has_permission(request, get_object_or_404(Project, id=id)):
+        if not IsProjectOwner.has_permission(request, project):
             messages.error(request, 'You cannot delete another user\'s project')
             return redirect(reverse_lazy('project:home'))
+        
+        if not project.payment_approved:
+            messages.error(request, 'You have not paid for this project')
+            return redirect(reverse('project:pay-for-project', kwargs={'id': project.id}))
         
         get_object_or_404(Project, id=id).delete()
         messages.success(request, f'{self.success_message}')
@@ -494,9 +555,10 @@ class SearchProjectsView(LoginRequiredMixin, View):
     
     def post(self, request):
         search_term = request.POST['search']
-        projects = Project.objects.filter(title=search_term)
+        # Convert string data to uuid
+        projects = Project.objects.filter(track_id=UUID(search_term))
         
-        context['searched_projetcs'] = projects
+        context['searched_projects'] = projects
         
         if len(projects) == 0:
             messages.error(request, 'No results found.')
