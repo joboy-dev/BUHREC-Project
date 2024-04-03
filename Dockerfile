@@ -26,4 +26,4 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 EXPOSE 8000
 
-CMD [ "gunicorn", "buhrec_project.wsgi"]
+CMD ["gunicorn", "buhrec_project.wsgi"]

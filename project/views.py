@@ -558,12 +558,32 @@ class SearchProjectsView(LoginRequiredMixin, View):
         # Convert string data to uuid
         projects = Project.objects.filter(track_id=UUID(search_term))
         
-        context['searched_projects'] = projects
-        
         if len(projects) == 0:
             messages.error(request, 'No results found.')
         else:
             messages.success(request, f'{len(projects)} result(s) found.')
             
-        return render(request, 'admin/admin-dashboard.html', context)
+        return redirect(reverse('project:search-results', kwargs={'track_id': UUID(search_term)}))
+            
+        # return render(request, 'admin/admin-dashboard.html', context)
+    
+
+class SearchResultsView(LoginRequiredMixin, View):
+    '''View to get the resulta of the search'''
+    
+    login_url = 'user:login'
+    
+    def get(self, request, track_id):
+        try:
+            project = Project.objects.get(track_id=track_id)
+            assignment = Assignment.objects.get(project=project)
+            
+            context['project'] = project
+            context['project_reviewer'] = assignment.reviewer
+            
+            return render(request, 'project/search-results.html', context)
+        except Project.DoesNotExist:
+            messages.error(request, 'No results found.')
+            return redirect(reverse_lazy('project:home'))
+            
     

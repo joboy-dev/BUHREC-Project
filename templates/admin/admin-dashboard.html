@@ -11,6 +11,7 @@
     <div class="breadcrumb">
         <h1>Dashboard</h1>
     </div>
+    
     <form action="{% url 'project:search-project' %}" method="post" class="search-form">
         {% csrf_token %}
         <input type="text" placeholder="Search projects with tracking id" name="search" required>
@@ -18,11 +19,10 @@
     </form>
 
     <div class="hr"></div>
-
+    
     <!-- CHAIR ADMIN ROLE -->
     {% if admin.role == 'chair' %}
-        
-        <!-- PROJECTS -->
+    <!-- PROJECTS -->
         {% if projects %}
             <div class="projects-container">
                 <table>

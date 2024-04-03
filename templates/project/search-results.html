@@ -3,134 +3,58 @@
 
 {% block page_title %} Dashboard {% endblock %}
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/search-result.css' %}">
 {% endblock %}
 
 {% block body %} 
-<section id="admin-dashboard">
+<section id="search-result">
     <div class="breadcrumb">
-        <h1>Search Results</h1>
+        <h1>Search Result</h1>
     </div>
     
-    <!-- CHAIR ADMIN ROLE -->
-    {% if admin.role == 'chair' %}
-        <!-- PROJECTS -->
-        {% if projects %}
-            <div class="projects-container">
-                <table>
-                    <tr class="table-head">
-                        <th>Title</th>
-                        <th>Level</th>
-                        <th>Program</th>
-                        <th>Name</th>
-                        <th>Track id</th>
-                        <th>Payment status</th>
-                        <th>Reviewer</th>
-                    </tr>
-        
-                    {% for assignment in assignments %}
-                    <tr>
-                        <td>{{ assignment.project.title }}</td>
-                        <td>{{ assignment.project.owner.degree.capitalize }}</td>
-                        <td>{{ assignment.project.owner.programme.capitalize }}</td>
-                        <td>{{ assignment.project.owner.user.last_name }}, {{ assignment.project.owner.user.first_name }}</td>
-                        <td>{{ assignment.project.track_id }} </td>
-                        <td>
-                            {% if assignment.project.payment_approved %}
-                            <span style="color: rgba(47, 168, 108);">Paid</span>
-                            {% else %}
-                            <span style="color: rgba(238, 107, 107);">Unpaid</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if not assignment.reviewer %}
-                            <form action="{% url 'project:assign-reviewer' assignment.id %}" method="post" class="assign-form">
-                                {% csrf_token %}
-                                <select name="reviewer" id="reviewer">
-                                    <option value="none">Select reviewer</option>
+    <div class="container">
+        {% if project %}
+        <div class="detail-container">
+            <p>Project name: <span>{{ project.title }}</span></p>
 
-                                    {% for reviewer in reviewers %}
-                                    <!-- Pass email as value to the backend -->
-                                    <option value="{{ reviewer.user.email }}">{{ reviewer.user.last_name }}, {{ reviewer.user.first_name }}</option>
-                                    {% endfor %}
-                                </select>
-                                <input type="submit" value="Assign">
-                            </form>
+            <p>Author: <span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</span></p>
 
-                            {% else %}
-                            <form action="{% url 'project:withdraw-assignment' assignment.id %}" method="post" class="assign-form">
-                                {% csrf_token %}
-                                <div class="name">
-                                    <p>{{ assignment.reviewer.user.last_name }}, {{ assignment.reviewer.user.first_name }} | <b>{{ assignment.reviewer.user.email }}</b></p>
-                                </div>
-                                <input type="submit" value="Withdraw">
-                            </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% else %}
-            <p class="nothing">No projects available</p>
-        {% endif %}
+            <p>Created at: <span>{{ project.created_at }}</span></p>
+            <p>Last updated: <span>{{ project.updated_at }}</span></p>
 
-    <!-- ASST CHAIR ADMIN ROLE -->
-    {% elif admin.role == 'asst chair' %}
-        <div class="asst-chair">
-            <div class="container">
-                <h1>Unassigned Projects</h1>
-                {% if unassigned_projects %}
-                    <div class="projects-container">
-                        {% for project in unassigned_projects %}
-                        <div class="project">
-                            <div>
-                                <p><span>Title: </span>{{ project.title }}</p>
-                                <p><span>Author: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p>
-                                <p><span>Created: </span>{{ project.created_at }}</p>
-                                <!-- <p><span>Reviewer: </span>{{ project.owner.user.last_name }}, {{ project.owner.user.first_name }}</p> -->
-                                {% if project.track_id %}
-                                <p><span>Track id: </span>{{ project.track_id}} </p>
-                                {% endif %}
-                            </div>
-        
-                            <form action="{% url 'project:assign-track-id' project.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn">Assign track id</button>
-                            </form>
-                        </div>
-                        {% endfor %}
-                    </div>
-            
+            {% if project_reviewer %}
+            <p>Reviewer: <span>{{ project_reviewer.user.last_name }}, {{ project_reviewer.user.first_name }}</span></p>
+            {% else %}
+            <p>Reviewer: <span>None assigned yet...</span></p>
+            {% endif %}
+            <p>
+                Approved: 
+                {% if project.approved %}
+                <span style="color: rgba(47, 168, 108);">Yes</span>
                 {% else %}
-                <p class="nothing">No pending unassigned projects</p>
+                <span style="color: rgba(238, 107, 107);">No</span>
                 {% endif %}
-            </div>
-            
-            <div class="container">
-                <h1>All Projects</h1>
-                {% if assignments %}
-                    <div class="projects-container">
-                        {% for assignment in assignments %}
-                        <div class="project">
-                            <div>
-                                <p><span>Title: </span>{{ assignment.project.title }}</p>
-                                <p><span>Author: </span>{{ assignment.project.owner.user.last_name }}, {{ assignment.project.owner.user.first_name }}</p>
-                                <p><span>Created: </span>{{ assignment.project.created_at }}</p>
-                                <!-- <p><span>Reviewer: </span>{{ assignment.project.owner.user.last_name }}, {{ assignment.project.owner.user.first_name }}</p> -->
-                                {% if assignment.project.track_id %}
-                                <p><span>Track id: </span>{{ assignment.project.track_id}}</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-            
+            </p>
+            <p>
+                Tracking ID: 
+                {% if project.track_id %}
+                <span>{{project.track_id}}</span>
                 {% else %}
-                <p class="nothing">No projects available</p>
+                <span>No track id assigned yet. Please wait...</span>
                 {% endif %}
-            </div>
+            </p>
+            <p>
+                Payment Status: 
+                {% if project.payment_approvex %}
+                <span style="color: rgba(47, 168, 108);">Paid</span>
+                {% else %}
+                <span style="color: rgba(238, 107, 107);">Unpaid</span>
+                {% endif %}
+            </p>
         </div>
-    {% endif %}
+        {% else %}
+        <p>Project not found</p>
+        {% endif %}
+    </div>
 </section>
 {% endblock %}

@@ -1,0 +1,32 @@
+#search-result {
+    height: 100vh;
+    width: 100%;
+}
+
+#search-result .container {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .detail-container {
+    height: fit-content;
+    width: fit-content;
+    background-color: var(--light-gold-color);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--box-shadow);
+    font-size: 0.75rem;
+}
+
+.detail-container p {
+    font-weight: bold;
+    color: var(--gold-color);
+}
+
+.detail-container span {
+    font-weight: normal;
+    color: var(--blue-color);
+}

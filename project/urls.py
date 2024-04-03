@@ -23,5 +23,6 @@ urlpatterns = [
     path('assignment/<uuid:id>/assign-reviewer/', views.GiveAssignmentView.as_view(), name='assign-reviewer'),
     path('assignment/<uuid:id>/withdraw/', views.WithdrawAssignmentView.as_view(), name='withdraw-assignment'),
     
-    path('project/search/<uuid:id>', views.SearchProjectsView.as_view(), name='search-project'),
+    path('project/search/', views.SearchProjectsView.as_view(), name='search-project'),
+    path('project/search/<uuid:track_id>/', views.SearchResultsView.as_view(), name='search-results'),
 ]
